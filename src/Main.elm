@@ -1,44 +1,135 @@
+-- TODO
+-- markdown読み込み
+-- math-markdownでの数学記号
+-- 記事検索
+
+
 module Main exposing (main)
 
+import Browser exposing (Document, document)
 import Html exposing (..)
-import Html.Attributes exposing (..)
+import Html.Attributes exposing (style)
+import List
+import Task
 import Time
 
 
-mainMarginLeft : Attribute ()
+type Msg
+    = TimeZoneHere Time.Zone
+
+
+type alias Model =
+    { timeZone : Maybe Time.Zone }
+
+
+mainMarginLeft : Attribute msg
 mainMarginLeft =
     style "margin-left" "300px"
 
 
 type Tag
-    = Tag String
+    = OtherTag String
 
 
-type BlogPost
-    = BlogPost
-        { title : String
-        , tags : List Tag
-        , article : String
-        , updatedTime : Time.Posix
-        }
+showTag : Tag -> Html msg
+showTag (OtherTag s) =
+    div [] [ text s ]
+
+
+type alias BlogPost =
+    { title : String
+    , tags : List Tag
+    , article : String
+    , updatedTime : Time.Posix
+    }
 
 
 blogPosts : List BlogPost
 blogPosts =
-    [ BlogPost { title = "初記事", tags = [ Tag "system" ], article = "ほにほに！ふわっ！ふわっ！ ٩(*╹ω╹*)و！！", updatedTime = Time.millisToPosix 158771117000 } ]
+    [ { title = "初記事", tags = [ OtherTag "投稿テスト" ], article = "ほにほに！ふわっ！ふわっ！ ٩(*╹ω╹*)و！！", updatedTime = Time.millisToPosix 1587711170000 } ]
 
 
-blogPostsView : List BlogPost -> Html ()
-blogPostsView _ =
-    div [] []
+toIntMonth : Time.Month -> Int
+toIntMonth month =
+    case month of
+        Time.Jan ->
+            1
+
+        Time.Feb ->
+            2
+
+        Time.Mar ->
+            3
+
+        Time.Apr ->
+            4
+
+        Time.May ->
+            5
+
+        Time.Jun ->
+            6
+
+        Time.Jul ->
+            7
+
+        Time.Aug ->
+            8
+
+        Time.Sep ->
+            9
+
+        Time.Oct ->
+            10
+
+        Time.Nov ->
+            11
+
+        Time.Dec ->
+            12
 
 
-title : Html ()
-title =
+showTime : Time.Zone -> Time.Posix -> String
+showTime zone time =
+    String.fromInt (Time.toYear zone time)
+        ++ "年 "
+        ++ (String.fromInt <|
+                toIntMonth <|
+                    Time.toMonth zone time
+           )
+        ++ "月"
+        ++ String.fromInt (Time.toDay zone time)
+        ++ "日 "
+        ++ String.fromInt (Time.toHour zone time)
+        ++ ":"
+        ++ String.fromInt (Time.toMinute zone time)
+        ++ ":"
+        ++ String.fromInt (Time.toSecond zone time)
+
+
+blogPostView : Time.Zone -> BlogPost -> Html msg
+blogPostView zone post =
+    div []
+        [ ul []
+            [ div [ style "font-size" "large" ] [ text post.title ]
+            , div [] [ text <| showTime zone post.updatedTime ]
+            , ul [] [ li [ style "list-style" "none" ] (List.map showTag post.tags) ]
+            , div [] [ text post.article ]
+            ]
+        ]
+
+
+blogPostsView : Time.Zone -> List BlogPost -> Html msg
+blogPostsView zone _ =
+    ul [] <| List.map (blogPostView zone) blogPosts
+
+
+pageTitle : Html msg
+pageTitle =
     div [ style "font-size" "x-large" ] [ text "ブログ予定地" ]
 
 
-myProfile : Html ()
+myProfile : Html msg
 myProfile =
     div
         [ style "height" "100%"
@@ -62,6 +153,42 @@ myProfile =
         ]
 
 
-main : Html ()
+jst : Time.Zone
+jst =
+    Time.customZone (9 * 60) []
+
+
+view : Model -> Document msg
+view model =
+    let
+        zone =
+            case model.timeZone of
+                Nothing ->
+                    jst
+
+                Just setzone ->
+                    setzone
+    in
+    { title = "ブログ予定地", body = [ div [] [ myProfile, div [ mainMarginLeft ] [ pageTitle, blogPostsView zone blogPosts ] ] ] }
+
+
+update : Msg -> Model -> ( Model, Cmd msg )
+update msg model =
+    case msg of
+        TimeZoneHere zone ->
+            ( { model | timeZone = Just zone }, Cmd.none )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none
+
+
+main : Platform.Program () Model Msg
 main =
-    div [] [ myProfile, div [ mainMarginLeft ] [ title, blogPostsView blogPosts ] ]
+    document
+        { init = \_ -> ( { timeZone = Nothing }, Cmd.none )
+        , view = view
+        , update = update
+        , subscriptions = subscriptions
+        }
