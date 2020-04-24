@@ -26,7 +26,7 @@ myProfile = div [
     div [] [text "profile"],
     ul [] [
       li [] [text "なまえ: tsukimizake"],
-      li [] [text "趣味: 柔術"],
+      li [] [text "最近の趣味: 柔術"],
       li [] [text "将来の夢: 農家"]  
     ]
   ]
