@@ -6,47 +6,28 @@
 
 module Main exposing (main)
 
+import ArticlesDecoder exposing (articlesDecoder)
 import Browser exposing (Document, document)
 import Html exposing (..)
 import Html.Attributes exposing (style)
+import Http exposing (..)
 import List
-import Task
+import Models exposing (..)
 import Time
 
 
 type Msg
     = TimeZoneHere Time.Zone
+    | GotArticles (Result Error (List Article))
 
 
 type alias Model =
-    { timeZone : Maybe Time.Zone }
+    { timeZone : Time.Zone, articles : List Article }
 
 
 mainMarginLeft : Attribute msg
 mainMarginLeft =
     style "margin-left" "300px"
-
-
-type Tag
-    = OtherTag String
-
-
-showTag : Tag -> Html msg
-showTag (OtherTag s) =
-    div [] [ text s ]
-
-
-type alias BlogPost =
-    { title : String
-    , tags : List Tag
-    , article : String
-    , updatedTime : Time.Posix
-    }
-
-
-blogPosts : List BlogPost
-blogPosts =
-    [ { title = "初記事", tags = [ OtherTag "投稿テスト" ], article = "ほにほに！ふわっ！ふわっ！ ٩(*╹ω╹*)و！！", updatedTime = Time.millisToPosix 1587711170000 } ]
 
 
 toIntMonth : Time.Month -> Int
@@ -107,21 +88,21 @@ showTime zone time =
         ++ String.fromInt (Time.toSecond zone time)
 
 
-blogPostView : Time.Zone -> BlogPost -> Html msg
-blogPostView zone post =
+articleView : Time.Zone -> Article -> Html msg
+articleView zone post =
     div []
         [ ul []
             [ div [ style "font-size" "large" ] [ text post.title ]
-            , div [] [ text <| showTime zone post.updatedTime ]
+            , div [] [ text <| "投稿日:" ++ showTime zone post.updatedTime ]
             , ul [] [ li [ style "list-style" "none" ] (List.map showTag post.tags) ]
-            , div [] [ text post.article ]
+            , div [] [ text post.articleText ]
             ]
         ]
 
 
-blogPostsView : Time.Zone -> List BlogPost -> Html msg
-blogPostsView zone _ =
-    ul [] <| List.map (blogPostView zone) blogPosts
+articlesView : Time.Zone -> List Article -> Html msg
+articlesView zone articles =
+    ul [] <| List.map (articleView zone) articles
 
 
 pageTitle : Html msg
@@ -160,23 +141,22 @@ jst =
 
 view : Model -> Document msg
 view model =
-    let
-        zone =
-            case model.timeZone of
-                Nothing ->
-                    jst
-
-                Just setzone ->
-                    setzone
-    in
-    { title = "ブログ予定地", body = [ div [] [ myProfile, div [ mainMarginLeft ] [ pageTitle, blogPostsView zone blogPosts ] ] ] }
+    { title = "ブログ予定地", body = [ div [] [ myProfile, div [ mainMarginLeft ] [ pageTitle, articlesView model.timeZone model.articles ] ] ] }
 
 
 update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
     case msg of
         TimeZoneHere zone ->
-            ( { model | timeZone = Just zone }, Cmd.none )
+            ( { model | timeZone = zone }, Cmd.none )
+
+        GotArticles result ->
+            case result of
+                Ok articles ->
+                    ( { model | articles = articles }, Cmd.none )
+
+                Err _ ->
+                    ( model, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
@@ -187,7 +167,7 @@ subscriptions model =
 main : Platform.Program () Model Msg
 main =
     document
-        { init = \_ -> ( { timeZone = Nothing }, Cmd.none )
+        { init = \_ -> ( { timeZone = jst, articles = [] }, Http.get { url = "https://tsukimizake.github.io/articles.json", expect = expectJson GotArticles articlesDecoder } )
         , view = view
         , update = update
         , subscriptions = subscriptions
