@@ -17,12 +17,11 @@ import Time
 
 
 type Msg
-    = TimeZoneHere Time.Zone
-    | GotArticles (Result Error (List Article))
+    = GotArticles (Result Error (List Article))
 
 
 type alias Model =
-    { timeZone : Time.Zone, articles : List Article }
+    { articles : List Article }
 
 
 mainMarginLeft : Attribute msg
@@ -141,15 +140,12 @@ jst =
 
 view : Model -> Document msg
 view model =
-    { title = "ブログ予定地", body = [ div [] [ myProfile, div [ mainMarginLeft ] [ pageTitle, articlesView model.timeZone model.articles ] ] ] }
+    { title = "ブログ予定地", body = [ div [] [ myProfile, div [ mainMarginLeft ] [ pageTitle, articlesView jst model.articles ] ] ] }
 
 
 update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
     case msg of
-        TimeZoneHere zone ->
-            ( { model | timeZone = zone }, Cmd.none )
-
         GotArticles result ->
             case result of
                 Ok articles ->
@@ -167,7 +163,7 @@ subscriptions model =
 main : Platform.Program () Model Msg
 main =
     document
-        { init = \_ -> ( { timeZone = jst, articles = [] }, Http.get { url = "https://tsukimizake.github.io/articles.json", expect = expectJson GotArticles articlesDecoder } )
+        { init = \_ -> ( { articles = [] }, Http.get { url = "https://tsukimizake.github.io/articles.json", expect = expectJson GotArticles articlesDecoder } )
         , view = view
         , update = update
         , subscriptions = subscriptions
