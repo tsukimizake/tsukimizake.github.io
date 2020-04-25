@@ -6163,19 +6163,16 @@ var $author$project$Main$update = F2(
 			return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		}
 	});
+var $elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$li = _VirtualDom_node('li');
-var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $author$project$Models$showTag = function (_v0) {
 	var s = _v0;
-	return A2(
-		$elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				$elm$html$Html$text(s)
-			]));
+	return s;
 };
 var $elm$time$Time$flooredDiv = F2(
 	function (numerator, denominator) {
@@ -6362,6 +6359,8 @@ var $author$project$Main$showTime = F2(
 	});
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $author$project$Main$articleView = F2(
 	function (zone, post) {
@@ -6404,7 +6403,13 @@ var $author$project$Main$articleView = F2(
 										[
 											A2($elm$html$Html$Attributes$style, 'list-style', 'none')
 										]),
-									A2($elm$core$List$map, $author$project$Models$showTag, post.ce))
+									A2(
+										$elm$core$List$cons,
+										$elm$html$Html$text('タグ: '),
+										A2(
+											$elm$core$List$map,
+											A2($elm$core$Basics$composeL, $elm$html$Html$text, $author$project$Models$showTag),
+											post.ce)))
 								])),
 							A2(
 							$elm$html$Html$div,
@@ -6438,7 +6443,7 @@ var $author$project$Main$myProfile = A2(
 	_List_fromArray(
 		[
 			A2($elm$html$Html$Attributes$style, 'height', '100%'),
-			A2($elm$html$Html$Attributes$style, 'background-color', '#E0E0E0'),
+			A2($elm$html$Html$Attributes$style, 'background-color', '#F0F0F0'),
 			A2($elm$html$Html$Attributes$style, 'position', 'fixed'),
 			A2($elm$html$Html$Attributes$style, 'z-index', '1'),
 			A2($elm$html$Html$Attributes$style, 'left', '0'),

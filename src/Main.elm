@@ -93,7 +93,7 @@ articleView zone post =
         [ ul []
             [ div [ style "font-size" "large" ] [ text post.title ]
             , div [] [ text <| "投稿日:" ++ showTime zone post.updatedTime ]
-            , ul [] [ li [ style "list-style" "none" ] (List.map showTag post.tags) ]
+            , ul [] [ li [ style "list-style" "none" ] (text "タグ: " :: List.map (text << showTag) post.tags) ]
             , div [] [ text post.articleText ]
             ]
         ]
@@ -113,7 +113,7 @@ myProfile : Html msg
 myProfile =
     div
         [ style "height" "100%"
-        , style "background-color" "#E0E0E0"
+        , style "background-color" "#F0F0F0"
         , style "position" "fixed"
         , style "z-index" "1"
         , style "left" "0"

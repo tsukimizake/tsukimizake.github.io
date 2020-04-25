@@ -8,9 +8,9 @@ type Tag
     = OtherTag String
 
 
-showTag : Tag -> Html.Html msg
+showTag : Tag -> String
 showTag (OtherTag s) =
-    Html.div [] [ Html.text s ]
+    s
 
 
 type alias Article =
