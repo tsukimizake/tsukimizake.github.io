@@ -44,7 +44,10 @@ parseContents = P.parse parser ""
     parser :: P.Parser Article
     parser = do
       title <- titleParser
-      updatedAt <- updatedAtParser
+      P.spaces
       tags <- tagsParser
+      P.spaces
+      updatedAt <- updatedAtParser
+      P.spaces
       body <- bodyParser
       pure $ Article {..}

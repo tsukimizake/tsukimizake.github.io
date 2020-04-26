@@ -5,6 +5,8 @@ import qualified Data.Text as T
 import qualified Data.Time.Calendar as Day
 import qualified Data.Time.LocalTime as Time
 import Debug.Trace
+import Model
+import Parser
 import Parser
 import Test.Hspec
 import qualified Text.Parsec as P
@@ -31,6 +33,16 @@ main = hspec $ do
       P.parse updatedAtParser "" (T.intercalate " " tokens) `shouldBe` Right (Time.LocalTime (Day.fromGregorian 2000 1 1) (Time.TimeOfDay 1 1 0))
   describe "body parser" do
     it "can parse body" do
-      let tokens = ["#", "body", "\n", "hoge"] :: [T.Text]
-      P.parse bodyParser "" (M.mconcat tokens) `shouldBe` Right "hoge"
-      P.parse bodyParser "" (T.intercalate " " tokens) `shouldBe` Right "hoge"
+      let tokens = ["#", "body", "\n", "hoge\nhuga\nhoni huwa"] :: [T.Text]
+      P.parse bodyParser "" (M.mconcat tokens) `shouldBe` Right "hoge\nhuga\nhoni huwa"
+      P.parse bodyParser "" (T.intercalate " " tokens) `shouldBe` Right "hoge\nhuga\nhoni huwa"
+
+    sampleArticle <- runIO $ readFile "./test/sampleArticle.md"
+    it "can parse whole post" do
+      case parseContents $ T.pack sampleArticle of
+        Right x  ->
+          title x `shouldBe` "honi"
+        Left err -> do 
+          putStrLn "err"
+          1 `shouldBe` 0
+              
