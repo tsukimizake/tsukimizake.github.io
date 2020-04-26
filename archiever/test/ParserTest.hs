@@ -46,6 +46,6 @@ main = hspec $ do
           updatedAt x `shouldBe` (Time.LocalTime (Day.fromGregorian 2020 4 23) (Time.TimeOfDay 13 20 0))
           body x `shouldBe` "ほにほに！ふわっ！ふわっ！ ٩(*╹ω╹*)و！！\n\n"
         Left err -> do 
-          putStrLn "err"
+          print err
           1 `shouldBe` 0
               
