@@ -1,4 +1,19 @@
 module Main where
 
+import qualified Data.Time.Calendar as Day
+import qualified Data.Time.LocalTime as Time
+
+template :: String -> Time.LocalTime -> String
+template title time = "#title\n" 
+  ++ title
+  ++ "#tags\n\n"
+  ++ "#updatedAt\n"
+  ++ show time
+  ++ "\n#body\n"
+
 main :: IO ()
-main = undefined
+main = do
+  putStr "insert title: "
+  title <- getLine 
+  time <- Time.zonedTimeToLocalTime <$> Time.getZonedTime 
+  writeFile ("../articles/" ++ title) (template title time)
