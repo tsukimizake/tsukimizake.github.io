@@ -40,8 +40,11 @@ main = hspec $ do
     sampleArticle <- runIO $ readFile "./test/sampleArticle.md"
     it "can parse whole post" do
       case parseContents $ T.pack sampleArticle of
-        Right x  ->
+        Right x  -> do
           title x `shouldBe` "honi"
+          tags x `shouldBe` ["test"]
+          updatedAt x `shouldBe` (Time.LocalTime (Day.fromGregorian 2020 4 23) (Time.TimeOfDay 13 20 0))
+          body x `shouldBe` "ほにほに！ふわっ！ふわっ！ ٩(*╹ω╹*)و！！\n\n"
         Left err -> do 
           putStrLn "err"
           1 `shouldBe` 0
