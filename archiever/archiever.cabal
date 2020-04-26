@@ -124,16 +124,18 @@ test-suite archiever-test
   hs-source-dirs:      test
 
   -- The entrypoint to the test suite.
-  main-is:             MyLibTest.hs
+  main-is:             ParserTest.hs
 
   -- Test dependencies.
 
   build-depends:
     base >=4.13,
+    archiever,
     directory,
     parsec,
     text,
-    time
+    time,
+    hspec
   default-extensions:
     Strict
     FlexibleContexts

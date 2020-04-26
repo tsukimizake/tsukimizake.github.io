@@ -8,11 +8,12 @@ import qualified Text.Parsec as P
 import qualified Text.Parsec.Char as P
 import qualified Text.Parsec.Text as P
 
-sectionParser :: T.Text -> P.Parser a -> P.Parser a
+sectionParser :: String -> P.Parser a -> P.Parser a
 sectionParser sectionName parser = do
   P.string "#"
   P.spaces
-  P.string $ T.unpack sectionName
+  P.string sectionName
+  P.spaces
   parser
 
 titleParser :: P.Parser T.Text
