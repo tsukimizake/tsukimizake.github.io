@@ -9,10 +9,6 @@ import Parser
 import qualified System.Directory as Dir
 import qualified System.IO as IO
 
-newArticle :: IO ()
-newArticle = do
-  undefined
-
 archieveArticles :: IO ()
 archieveArticles = do
   files <- Dir.listDirectory "../articles"
