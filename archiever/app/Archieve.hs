@@ -1,10 +1,12 @@
 module Main where
 
 import qualified Data.Aeson as J
+import qualified Data.Aeson.Text as JT
 import Data.Either
 import qualified Data.List as L
 import qualified Data.Maybe as M
 import qualified Data.Text as T
+import qualified Data.Text.Lazy as LT
 import qualified Data.Time.LocalTime as Time
 import Model
 import Parser
@@ -23,7 +25,6 @@ archieveArticles contents = do
       let articles = rights parseResults
       Right $ J.toJSON articles
 
-
 endsWith :: String -> String -> Bool
 endsWith short long = M.isJust $ L.stripPrefix (reverse short) (reverse long)
 
@@ -35,6 +36,9 @@ main = do
   let articles = archieveArticles contents
   case articles of 
     Right res -> do 
-      print res
-    Left err -> print err
+      let xs = JT.encodeToLazyText res
+      let distPath = "../articles.json"
+      IO.writeFile distPath $ LT.unpack xs
+      putStrLn "DONE!"
+    Left err -> print err -- TODO どのarticleでエラー出たか表示
 
