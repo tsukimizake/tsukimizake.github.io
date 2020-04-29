@@ -47,7 +47,7 @@ parseContents = P.parse parser ""
       P.spaces
       tags <- tagsParser
       P.spaces
-      updatedAt <- updatedAtParser
+      updatedTime <- updatedAtParser
       P.spaces
-      body <- bodyParser
+      articleText <- bodyParser
       pure $ Article {..}

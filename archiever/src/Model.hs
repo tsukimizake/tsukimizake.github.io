@@ -9,10 +9,10 @@ type Tag = T.Text
 
 data Article = Article
   { title :: T.Text,
-    updatedAt ::
+    updatedTime ::
       Time.LocalTime,
     tags :: [Tag],
-    body :: T.Text
+    articleText :: T.Text
   }
   deriving (Show, Generic)
 
