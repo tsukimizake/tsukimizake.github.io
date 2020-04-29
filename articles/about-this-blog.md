@@ -1,7 +1,7 @@
 # title
 テスト記事も兼ねてこのブログの構成の話など
 
-# tag
+# tags
 elm haskell
 
 # updatedAt
