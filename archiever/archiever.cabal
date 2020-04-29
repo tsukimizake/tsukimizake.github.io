@@ -65,13 +65,15 @@ library
     directory,
     parsec,
     text,
-    time
+    time,
+    aeson
   default-extensions:
     Strict
     FlexibleContexts
     RecordWildCards
     OverloadedStrings
     BlockArguments
+    DeriveGeneric
 
   -- Directories containing source files.
   hs-source-dirs:      src
@@ -135,13 +137,15 @@ executable archieve
     directory,
     parsec,
     text,
-    time
+    time,
+    aeson
   default-extensions:
     Strict
     FlexibleContexts
     RecordWildCards
     OverloadedStrings
     BlockArguments
+    ScopedTypeVariables
 
 
 
