@@ -18,4 +18,4 @@ main = do
   IO.hFlush IO.stdout 
   title <- getLine 
   time <- Time.zonedTimeToLocalTime <$> Time.getZonedTime 
-  writeFile ("../articles/" ++ title) (template title time)
+  writeFile ("../articles/" ++ title ++ ".md") (template title time)
