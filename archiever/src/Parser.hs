@@ -26,9 +26,9 @@ titleParser = sectionParser "title" $ T.pack <$> P.many1 P.alphaNum
 updatedAtParser :: P.Parser Integer
 updatedAtParser = sectionParser "updatedAt" do
   y <- read <$> P.many1 P.digit
-  _ <- P.char '/'
+  _ <- P.char '-'
   m <- read <$> P.many1 P.digit
-  _ <- P.char '/'
+  _ <- P.char '-'
   d <- read <$> P.many1 P.digit
   _ <- P.many1 $ P.char ' '
   h <- read <$> P.many1 P.digit
