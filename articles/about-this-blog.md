@@ -29,7 +29,7 @@ elm haskell
 
 TODOは
 
-- markdownレンダリングちゃんとやる
+- ~markdownレンダリングちゃんとやる~
 
 - 本文、タイトル、タグでの過去記事検索
 
