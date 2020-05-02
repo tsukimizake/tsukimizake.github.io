@@ -12,13 +12,15 @@ import Html exposing (..)
 import Html.Attributes exposing (style)
 import Http exposing (..)
 import List
-import MMarkdown
+import Markdown.Option
+import Markdown.Render
 import Models exposing (..)
 import Time
 
 
 type Msg
     = GotArticles (Result Error (List Article))
+    | NoOp
 
 
 type alias Model =
@@ -88,19 +90,19 @@ showTime zone time =
         ++ String.fromInt (Time.toSecond zone time)
 
 
-articleView : Time.Zone -> Article -> Html msg
+articleView : Time.Zone -> Article -> Html Msg
 articleView zone post =
     div []
         [ ul []
             [ div [ style "font-size" "large" ] [ text post.title ]
             , div [] [ text <| "投稿日:" ++ showTime zone post.updatedTime ]
             , ul [] [ li [ style "list-style" "none" ] (text "タグ: " :: List.map (text << showTag) post.tags) ]
-            , div [] [ MMarkdown.toHtml [] post.articleText ]
+            , div [] [ map (\_ -> NoOp) <| Markdown.Render.toHtml Markdown.Option.ExtendedMath post.articleText ]
             ]
         ]
 
 
-articlesView : Time.Zone -> List Article -> Html msg
+articlesView : Time.Zone -> List Article -> Html Msg
 articlesView zone articles =
     ul [] <| List.map (articleView zone) articles
 
@@ -139,7 +141,7 @@ jst =
     Time.customZone (9 * 60) []
 
 
-view : Model -> Document msg
+view : Model -> Document Msg
 view model =
     { title = "ブログ予定地", body = [ div [] [ myProfile, div [ mainMarginLeft ] [ pageTitle, articlesView jst model.articles ] ] ] }
 
@@ -154,6 +156,9 @@ update msg model =
 
                 Err _ ->
                     ( model, Cmd.none )
+
+        NoOp ->
+            ( model, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
