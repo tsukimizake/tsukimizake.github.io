@@ -23,6 +23,11 @@ type Msg
     | NoOp
 
 
+debugMode : Bool
+debugMode =
+    True
+
+
 type alias Model =
     { articles : List Article }
 
@@ -138,7 +143,17 @@ myProfile =
 
 jst : Time.Zone
 jst =
-    Time.customZone (9 * 60) []
+    Time.customZone (9 * 60)
+        []
+
+
+articlesUrl : String
+articlesUrl =
+    if debugMode then
+        "./articles.json"
+
+    else
+        "https://tsukimizake.github.io/articles.json"
 
 
 view : Model -> Document Msg
@@ -169,7 +184,7 @@ subscriptions model =
 main : Platform.Program () Model Msg
 main =
     document
-        { init = \_ -> ( { articles = [] }, Http.get { url = "https://tsukimizake.github.io/articles.json", expect = expectJson GotArticles articlesDecoder } )
+        { init = \_ -> ( { articles = [] }, Http.get { url = articlesUrl, expect = expectJson GotArticles articlesDecoder } )
         , view = view
         , update = update
         , subscriptions = subscriptions
