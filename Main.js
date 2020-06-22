@@ -5307,6 +5307,8 @@ var $author$project$ArticlesDecoder$articleDecoder = A5(
 		'updatedTime',
 		A2($elm$json$Json$Decode$map, $elm$time$Time$millisToPosix, $elm$json$Json$Decode$int)));
 var $author$project$ArticlesDecoder$articlesDecoder = $elm$json$Json$Decode$list($author$project$ArticlesDecoder$articleDecoder);
+var $author$project$Main$debugMode = true;
+var $author$project$Main$articlesUrl = $author$project$Main$debugMode ? './articles.json' : 'https://tsukimizake.github.io/articles.json';
 var $elm$json$Json$Decode$map2 = _Json_map2;
 var $elm$json$Json$Decode$succeed = _Json_succeed;
 var $elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
@@ -15577,7 +15579,7 @@ var $author$project$Main$main = $elm$browser$Browser$document(
 				$elm$http$Http$get(
 					{
 						cj: A2($elm$http$Http$expectJson, $author$project$Main$GotArticles, $author$project$ArticlesDecoder$articlesDecoder),
-						c1: 'https://tsukimizake.github.io/articles.json'
+						c1: $author$project$Main$articlesUrl
 					}));
 		},
 		cW: $author$project$Main$subscriptions,
