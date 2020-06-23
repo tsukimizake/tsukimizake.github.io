@@ -4,7 +4,7 @@ haskellを1年仕事で書いてみて思ったこと
 #tags
 haskell
 #updatedAt
-2020-05-02 13:20:52
+2020-05-02 13:20
 
 #body
 この一年間、仕事でServantとPersistentを使ったバックエンドサーバを作っていた。
