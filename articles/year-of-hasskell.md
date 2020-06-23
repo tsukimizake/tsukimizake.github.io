@@ -100,6 +100,7 @@ import qualified Hoge as H
 - ソースコード中で Hogeモジュール内のhugaを新しく使う
 - import文に戻ってimport Hoge (hoge)をimport Hoge (hoge, huga)に変更する
 - 元の位置に戻る
+
 のループを気の狂うような回数やる羽目になるのでおすすめできない。
 
 ## なんか続くかも
