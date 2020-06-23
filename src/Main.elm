@@ -24,7 +24,7 @@ type Msg
 
 debugMode : Bool
 debugMode =
-    False
+    True
 
 
 type alias Model =
@@ -149,7 +149,7 @@ jst =
 articlesUrl : String
 articlesUrl =
     if debugMode then
-        "./articles.json"
+        "http://127.0.0.1:8080/articles.json"
 
     else
         "https://tsukimizake.github.io/articles.json"
@@ -183,7 +183,11 @@ subscriptions model =
 main : Platform.Program () Model Msg
 main =
     document
-        { init = \_ -> ( { articles = [] }, Http.get { url = articlesUrl, expect = expectJson GotArticles articlesDecoder } )
+        { init =
+            \_ ->
+                ( { articles = [] }
+                , Http.get { url = articlesUrl, expect = expectJson GotArticles articlesDecoder }
+                )
         , view = view
         , update = update
         , subscriptions = subscriptions
