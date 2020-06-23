@@ -12,8 +12,7 @@ import Html exposing (..)
 import Html.Attributes exposing (style)
 import Http exposing (..)
 import List
-import Markdown.Option
-import Markdown.Render
+import Markdown
 import Models exposing (..)
 import Time
 
@@ -102,7 +101,7 @@ articleView zone post =
             [ div [ style "font-size" "large" ] [ text post.title ]
             , div [] [ text <| "投稿日:" ++ showTime zone post.updatedTime ]
             , ul [] [ li [ style "list-style" "none" ] (text "タグ: " :: List.map (text << showTag) post.tags) ]
-            , div [] [ map (\_ -> NoOp) <| Markdown.Render.toHtml Markdown.Option.ExtendedMath post.articleText ]
+            , div [] [ Markdown.toHtml [] post.articleText ]
             ]
         ]
 
