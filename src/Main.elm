@@ -19,7 +19,6 @@ import Time
 
 type Msg
     = GotArticles (Result Error (List Article))
-    | NoOp
 
 
 debugMode : Bool
@@ -98,7 +97,7 @@ articleView : Time.Zone -> Article -> Html Msg
 articleView zone post =
     div []
         [ ul []
-            [ div [ style "font-size" "large" ] [ text post.title ]
+            [ h1 [] [ text post.title ]
             , div [] [ text <| "投稿日:" ++ showTime zone post.updatedTime ]
             , ul [] [ li [ style "list-style" "none" ] (text "タグ: " :: List.map (text << showTag) post.tags) ]
             , div [] [ Markdown.toHtml [] post.articleText ]
@@ -170,9 +169,6 @@ update msg model =
 
                 Err _ ->
                     ( model, Cmd.none )
-
-        NoOp ->
-            ( model, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg

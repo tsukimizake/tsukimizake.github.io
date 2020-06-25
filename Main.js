@@ -4709,9 +4709,10 @@ var $elm$core$Set$toList = function (_v0) {
 var $elm$core$Basics$EQ = 1;
 var $elm$core$Basics$GT = 2;
 var $elm$core$Basics$LT = 0;
-var $author$project$Main$GotArticles = function (a) {
-	return {$: 0, a: a};
+var $elm$core$Basics$identity = function (x) {
+	return x;
 };
+var $author$project$Main$GotArticles = $elm$core$Basics$identity;
 var $author$project$Models$Article = F4(
 	function (title, tags, articleText, updatedTime) {
 		return {bS: articleText, cL: tags, bG: title, cO: updatedTime};
@@ -5116,9 +5117,6 @@ var $elm$json$Json$Decode$int = _Json_decodeInt;
 var $elm$json$Json$Decode$list = _Json_decodeList;
 var $elm$json$Json$Decode$map = _Json_map1;
 var $elm$json$Json$Decode$map4 = _Json_map4;
-var $elm$core$Basics$identity = function (x) {
-	return x;
-};
 var $elm$time$Time$Posix = $elm$core$Basics$identity;
 var $elm$time$Time$millisToPosix = $elm$core$Basics$identity;
 var $elm$json$Json$Decode$string = _Json_decodeString;
@@ -6240,18 +6238,14 @@ var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$update = F2(
 	function (msg, model) {
-		if (!msg.$) {
-			var result = msg.a;
-			if (!result.$) {
-				var articles = result.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{ax: articles}),
-					$elm$core$Platform$Cmd$none);
-			} else {
-				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-			}
+		var result = msg;
+		if (!result.$) {
+			var articles = result.a;
+			return _Utils_Tuple2(
+				_Utils_update(
+					model,
+					{ax: articles}),
+				$elm$core$Platform$Cmd$none);
 		} else {
 			return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		}
@@ -6262,6 +6256,7 @@ var $elm$core$Basics$composeL = F3(
 			f(x));
 	});
 var $elm$html$Html$div = _VirtualDom_node('div');
+var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$li = _VirtualDom_node('li');
 var $author$project$Models$showTag = function (_v0) {
 	var s = _v0;
@@ -6477,11 +6472,8 @@ var $author$project$Main$articleView = F2(
 					_List_fromArray(
 						[
 							A2(
-							$elm$html$Html$div,
-							_List_fromArray(
-								[
-									A2($elm$html$Html$Attributes$style, 'font-size', 'large')
-								]),
+							$elm$html$Html$h1,
+							_List_Nil,
 							_List_fromArray(
 								[
 									$elm$html$Html$text(post.bG)
@@ -6634,7 +6626,7 @@ var $author$project$Main$main = $elm$browser$Browser$document(
 				{ax: _List_Nil},
 				$elm$http$Http$get(
 					{
-						b2: A2($elm$http$Http$expectJson, $author$project$Main$GotArticles, $author$project$ArticlesDecoder$articlesDecoder),
+						b2: A2($elm$http$Http$expectJson, $elm$core$Basics$identity, $author$project$ArticlesDecoder$articlesDecoder),
 						cP: $author$project$Main$articlesUrl
 					}));
 		},
