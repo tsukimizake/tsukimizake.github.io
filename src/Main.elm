@@ -148,6 +148,7 @@ jst =
 articlesUrl : String
 articlesUrl =
     if debugMode then
+        -- serve with http-server --cors='*' .
         "http://127.0.0.1:8080/articles.json"
 
     else
