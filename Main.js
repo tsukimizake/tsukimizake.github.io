@@ -5136,7 +5136,7 @@ var $author$project$ArticlesDecoder$articleDecoder = A5(
 		'updatedTime',
 		A2($elm$json$Json$Decode$map, $elm$time$Time$millisToPosix, $elm$json$Json$Decode$int)));
 var $author$project$ArticlesDecoder$articlesDecoder = $elm$json$Json$Decode$list($author$project$ArticlesDecoder$articleDecoder);
-var $author$project$Main$debugMode = true;
+var $author$project$Main$debugMode = false;
 var $author$project$Main$articlesUrl = $author$project$Main$debugMode ? 'http://127.0.0.1:8080/articles.json' : 'https://tsukimizake.github.io/articles.json';
 var $elm$json$Json$Decode$map2 = _Json_map2;
 var $elm$json$Json$Decode$succeed = _Json_succeed;
@@ -6463,7 +6463,12 @@ var $author$project$Main$articleView = F2(
 	function (zone, post) {
 		return A2(
 			$elm$html$Html$div,
-			_List_Nil,
+			_List_fromArray(
+				[
+					A2($elm$html$Html$Attributes$style, 'border', 'solid 3px #000000'),
+					A2($elm$html$Html$Attributes$style, 'margin-right', '100px'),
+					A2($elm$html$Html$Attributes$style, 'margin-bottom', '100px')
+				]),
 			_List_fromArray(
 				[
 					A2(
@@ -6507,7 +6512,10 @@ var $author$project$Main$articleView = F2(
 								])),
 							A2(
 							$elm$html$Html$div,
-							_List_Nil,
+							_List_fromArray(
+								[
+									A2($elm$html$Html$Attributes$style, 'margin-right', '50px')
+								]),
 							_List_fromArray(
 								[
 									A2($elm_explorations$markdown$Markdown$toHtml, _List_Nil, post.bS)

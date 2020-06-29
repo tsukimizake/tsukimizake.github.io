@@ -23,7 +23,7 @@ type Msg
 
 debugMode : Bool
 debugMode =
-    True
+    False
 
 
 type alias Model =
@@ -95,12 +95,12 @@ showTime zone time =
 
 articleView : Time.Zone -> Article -> Html Msg
 articleView zone post =
-    div []
+    div [ style "border" "solid 3px #000000", style "margin-right" "100px", style "margin-bottom" "100px" ]
         [ ul []
             [ h1 [] [ text post.title ]
             , div [] [ text <| "投稿日:" ++ showTime zone post.updatedTime ]
             , ul [] [ li [ style "list-style" "none" ] (text "タグ: " :: List.map (text << showTag) post.tags) ]
-            , div [] [ Markdown.toHtml [] post.articleText ]
+            , div [ style "margin-right" "50px" ] [ Markdown.toHtml [] post.articleText ]
             ]
         ]
 
