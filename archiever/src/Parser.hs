@@ -45,12 +45,17 @@ tagsParser = sectionParser "tags" $ map T.pack <$> (P.many1 P.alphaNum `P.sepBy`
 bodyParser :: P.Parser T.Text
 bodyParser = sectionParser "body" $ T.pack <$> P.many1 P.anyChar
 
+uidParser :: P.Parser Int
+uidParser = sectionParser "uid" $ read <$> P.many1 P.digit 
+
 parseContents :: T.Text -> Either P.ParseError Article
 parseContents = P.parse parser ""
   where
     parser :: P.Parser Article
     parser = do
       title <- titleParser
+      P.spaces
+      uid <- uidParser
       P.spaces
       tags <- tagsParser
       P.spaces

@@ -112,6 +112,7 @@ executable newArticle
     RecordWildCards
     OverloadedStrings
     BlockArguments
+    ScopedTypeVariables
 
 
 executable archieve

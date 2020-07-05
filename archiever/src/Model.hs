@@ -9,6 +9,7 @@ type Tag = T.Text
 
 data Article = Article
   { title :: T.Text,
+    uid :: Int,
     updatedTime ::
       Integer,
     tags :: [Tag],

@@ -42,6 +42,7 @@ main = hspec $ do
       case parseContents $ T.pack sampleArticle of
         Right x  -> do
           title x `shouldBe` "honi"
+          uid x `shouldBe` 1
           tags x `shouldBe` ["test"]
           updatedTime x `shouldBe` 1587615600000
           articleText x `shouldBe` "ほにほに！ふわっ！ふわっ！ ٩(*╹ω╹*)و！！\n\n"
