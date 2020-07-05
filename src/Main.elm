@@ -15,6 +15,7 @@ import List
 import Markdown
 import Models exposing (..)
 import Time
+import Url exposing (Url)
 
 
 type Msg
@@ -190,14 +191,15 @@ subscriptions model =
     Sub.none
 
 
+init : flags -> Url -> Key -> ( Model, Cmd msg )
+init _ url key =
+    ( { articles = [] }, Http.get { url = articlesUrl, expect = expectJson GotArticles articlesDecoder } )
+
+
 main : Platform.Program () Model Msg
 main =
-    document
-        { init =
-            \_ ->
-                ( { articles = [] }
-                , Http.get { url = articlesUrl, expect = expectJson GotArticles articlesDecoder }
-                )
+    Browser.application
+        { init = init
         , view = view
         , update = update
         , subscriptions = subscriptions
