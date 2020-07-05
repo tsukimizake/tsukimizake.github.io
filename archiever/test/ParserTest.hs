@@ -28,9 +28,9 @@ main = hspec $ do
 
   describe "updatedAt parser" do
     it "can parse updatedAt" do
-      let tokens = ["#", "updatedAt", "\n", "2000/1/1 1:1"] :: [T.Text]
-      P.parse updatedAtParser "" (M.mconcat tokens) `shouldBe` Right (Time.LocalTime (Day.fromGregorian 2000 1 1) (Time.TimeOfDay 1 1 0))
-      P.parse updatedAtParser "" (T.intercalate " " tokens) `shouldBe` Right (Time.LocalTime (Day.fromGregorian 2000 1 1) (Time.TimeOfDay 1 1 0))
+      let tokens = ["#", "updatedAt", "\n", "2000-1-1 1:1"] :: [T.Text]
+      P.parse updatedAtParser "" (M.mconcat tokens) `shouldBe` Right 946656060000
+      P.parse updatedAtParser "" (T.intercalate " " tokens) `shouldBe` Right 946656060000
   describe "body parser" do
     it "can parse body" do
       let tokens = ["#", "body", "\n", "hoge\nhuga\nhoni huwa"] :: [T.Text]
@@ -43,8 +43,8 @@ main = hspec $ do
         Right x  -> do
           title x `shouldBe` "honi"
           tags x `shouldBe` ["test"]
-          updatedAt x `shouldBe` (Time.LocalTime (Day.fromGregorian 2020 4 23) (Time.TimeOfDay 13 20 0))
-          body x `shouldBe` "ほにほに！ふわっ！ふわっ！ ٩(*╹ω╹*)و！！\n\n"
+          updatedTime x `shouldBe` 1587615600000
+          articleText x `shouldBe` "ほにほに！ふわっ！ふわっ！ ٩(*╹ω╹*)و！！\n\n"
         Left err -> do 
           print err
           1 `shouldBe` 0
