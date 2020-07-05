@@ -5136,7 +5136,7 @@ var $author$project$ArticlesDecoder$articleDecoder = A5(
 		'updatedTime',
 		A2($elm$json$Json$Decode$map, $elm$time$Time$millisToPosix, $elm$json$Json$Decode$int)));
 var $author$project$ArticlesDecoder$articlesDecoder = $elm$json$Json$Decode$list($author$project$ArticlesDecoder$articleDecoder);
-var $author$project$Main$debugMode = true;
+var $author$project$Main$debugMode = false;
 var $author$project$Main$articlesUrl = $author$project$Main$debugMode ? 'http://127.0.0.1:8080/articles.json' : 'https://tsukimizake.github.io/articles.json';
 var $elm$json$Json$Decode$map2 = _Json_map2;
 var $elm$json$Json$Decode$succeed = _Json_succeed;
@@ -6250,11 +6250,6 @@ var $author$project$Main$update = F2(
 			return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		}
 	});
-var $elm$core$Basics$composeL = F3(
-	function (g, f, x) {
-		return g(
-			f(x));
-	});
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$li = _VirtualDom_node('li');
@@ -6461,6 +6456,23 @@ var $elm_explorations$markdown$Markdown$toHtml = $elm_explorations$markdown$Mark
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $author$project$Main$articleView = F2(
 	function (zone, post) {
+		var tags = A2($elm$core$List$map, $author$project$Models$showTag, post.cL);
+		var tagsView = A2(
+			$elm$core$List$map,
+			function (s) {
+				return A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							A2($elm$html$Html$Attributes$style, 'display', 'inline-block'),
+							A2($elm$html$Html$Attributes$style, 'margin-left', '10px')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(s)
+						]));
+			},
+			tags);
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -6505,10 +6517,7 @@ var $author$project$Main$articleView = F2(
 									A2(
 										$elm$core$List$cons,
 										$elm$html$Html$text('タグ: '),
-										A2(
-											$elm$core$List$map,
-											A2($elm$core$Basics$composeL, $elm$html$Html$text, $author$project$Models$showTag),
-											post.cL)))
+										tagsView))
 								])),
 							A2(
 							$elm$html$Html$div,

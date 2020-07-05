@@ -21,9 +21,13 @@ type Msg
     = GotArticles (Result Error (List Article))
 
 
+
+--TODO debugMode変更し忘れてcommitすると記事表示されないので何かマシな方法を
+
+
 debugMode : Bool
 debugMode =
-    True
+    False
 
 
 type alias Model =
@@ -95,11 +99,20 @@ showTime zone time =
 
 articleView : Time.Zone -> Article -> Html Msg
 articleView zone post =
+    let
+        tags : List String
+        tags =
+            List.map showTag post.tags
+
+        tagsView : List (Html Msg)
+        tagsView =
+            List.map (\s -> div [ style "display" "inline-block", style "margin-left" "10px" ] [ text s ]) tags
+    in
     div [ style "border" "solid 3px #000000", style "margin-right" "100px", style "margin-bottom" "100px" ]
         [ ul []
             [ h1 [] [ text post.title ]
             , div [] [ text <| "投稿日:" ++ showTime zone post.updatedTime ]
-            , ul [] [ li [ style "list-style" "none" ] (text "タグ: " :: List.map (text << showTag) post.tags) ]
+            , ul [] [ li [ style "list-style" "none" ] (text "タグ: " :: tagsView) ]
             , div [ style "margin-right" "50px" ] [ Markdown.toHtml [] post.articleText ]
             ]
         ]
