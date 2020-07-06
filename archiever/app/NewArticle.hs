@@ -21,7 +21,7 @@ template title uid time = "#title\n"
 findValidUid :: IO Int
 findValidUid = do
   files <- Dir.listDirectory "../articles/"
-  let ids = map (read . takeWhile (== '-')) files
+  let ids = map (read . takeWhile (/= '-')) files
   return . head $ [0..] L.\\ ids
 
 main :: IO ()
