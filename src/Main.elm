@@ -7,7 +7,8 @@
 module Main exposing (main)
 
 import ArticlesDecoder exposing (articlesDecoder)
-import Browser exposing (Document, document)
+import Browser exposing (..)
+import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (style)
 import Http exposing (..)
@@ -15,11 +16,14 @@ import List
 import Markdown
 import Models exposing (..)
 import Time
-import Url exposing (Url)
+import Url as Url
 
 
 type Msg
     = GotArticles (Result Error (List Article))
+    | Nop
+    | UrlChanged Url.Url
+    | LinkClicked UrlRequest
 
 
 
@@ -28,11 +32,11 @@ type Msg
 
 debugMode : Bool
 debugMode =
-    False
+    True
 
 
 type alias Model =
-    { articles : List Article }
+    { articles : List Article, url : Url.Url, key : Nav.Key }
 
 
 mainMarginLeft : Attribute msg
@@ -185,21 +189,37 @@ update msg model =
                 Err _ ->
                     ( model, Cmd.none )
 
+        Nop ->
+            ( model, Cmd.none )
+
+        UrlChanged url ->
+            ( { model | url = url }, Cmd.none )
+
+        LinkClicked req ->
+            case req of
+                Browser.Internal url ->
+                    ( model, Nav.pushUrl model.key (Url.toString url) )
+
+                Browser.External href ->
+                    ( model, Nav.load href )
+
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.none
 
 
-init : flags -> Url -> Key -> ( Model, Cmd msg )
+init : flags -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
-    ( { articles = [] }, Http.get { url = articlesUrl, expect = expectJson GotArticles articlesDecoder } )
+    ( { articles = [], url = url, key = key }, Http.get { url = articlesUrl, expect = expectJson GotArticles articlesDecoder } )
 
 
 main : Platform.Program () Model Msg
 main =
     Browser.application
         { init = init
+        , onUrlChange = UrlChanged
+        , onUrlRequest = LinkClicked
         , view = view
         , update = update
         , subscriptions = subscriptions
