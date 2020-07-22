@@ -1,6 +1,9 @@
 #title
 haskellを1年仕事で書いてみて思ったこと 
 
+# uid
+1
+
 #tags
 haskell
 #updatedAt

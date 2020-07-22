@@ -1,6 +1,9 @@
 # title
 テスト記事も兼ねてこのブログの構成の話など
 
+# uid
+0
+
 # tags
 elm haskell
 
