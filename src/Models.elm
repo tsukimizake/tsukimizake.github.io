@@ -18,4 +18,5 @@ type alias Article =
     , tags : List Tag
     , articleText : String
     , updatedTime : Time.Posix
+    , uid : Int
     }

@@ -32,7 +32,7 @@ type Msg
 
 debugMode : Bool
 debugMode =
-    True
+    False
 
 
 type alias Model =

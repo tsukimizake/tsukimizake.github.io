@@ -1858,7 +1858,7 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 		flagDecoder,
 		args,
 		impl.ce,
-		impl.cO,
+		impl.cP,
 		impl.cJ,
 		function() { return function() {} }
 	);
@@ -3929,10 +3929,10 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 		flagDecoder,
 		args,
 		impl.ce,
-		impl.cO,
+		impl.cP,
 		impl.cJ,
 		function(sendToApp, initialModel) {
-			var view = impl.cQ;
+			var view = impl.cR;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3965,11 +3965,11 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 		flagDecoder,
 		args,
 		impl.ce,
-		impl.cO,
+		impl.cP,
 		impl.cJ,
 		function(sendToApp, initialModel) {
 			var divertHrefToApp = impl.aO && impl.aO(sendToApp)
-			var view = impl.cQ;
+			var view = impl.cR;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -4073,8 +4073,8 @@ function _Browser_application(impl)
 		{
 			return A3(impl.ce, flags, _Browser_getUrl(), key);
 		},
-		cQ: impl.cQ,
-		cO: impl.cO,
+		cR: impl.cR,
+		cP: impl.cP,
 		cJ: impl.cJ
 	});
 }
@@ -5421,21 +5421,21 @@ var $elm$browser$Browser$application = _Browser_application;
 var $author$project$Main$GotArticles = function (a) {
 	return {$: 0, a: a};
 };
-var $author$project$Models$Article = F4(
-	function (title, tags, articleText, updatedTime) {
-		return {bT: articleText, cM: tags, bH: title, cP: updatedTime};
+var $author$project$Models$Article = F5(
+	function (title, tags, articleText, updatedTime, uid) {
+		return {bT: articleText, cM: tags, bH: title, cO: uid, cQ: updatedTime};
 	});
 var $elm$json$Json$Decode$field = _Json_decodeField;
 var $elm$json$Json$Decode$int = _Json_decodeInt;
 var $elm$json$Json$Decode$list = _Json_decodeList;
-var $elm$json$Json$Decode$map4 = _Json_map4;
+var $elm$json$Json$Decode$map5 = _Json_map5;
 var $elm$time$Time$Posix = $elm$core$Basics$identity;
 var $elm$time$Time$millisToPosix = $elm$core$Basics$identity;
 var $elm$json$Json$Decode$string = _Json_decodeString;
 var $author$project$Models$OtherTag = $elm$core$Basics$identity;
 var $author$project$ArticlesDecoder$tagDecoder = A2($elm$json$Json$Decode$map, $elm$core$Basics$identity, $elm$json$Json$Decode$string);
-var $author$project$ArticlesDecoder$articleDecoder = A5(
-	$elm$json$Json$Decode$map4,
+var $author$project$ArticlesDecoder$articleDecoder = A6(
+	$elm$json$Json$Decode$map5,
 	$author$project$Models$Article,
 	A2($elm$json$Json$Decode$field, 'title', $elm$json$Json$Decode$string),
 	A2(
@@ -5446,9 +5446,10 @@ var $author$project$ArticlesDecoder$articleDecoder = A5(
 	A2(
 		$elm$json$Json$Decode$field,
 		'updatedTime',
-		A2($elm$json$Json$Decode$map, $elm$time$Time$millisToPosix, $elm$json$Json$Decode$int)));
+		A2($elm$json$Json$Decode$map, $elm$time$Time$millisToPosix, $elm$json$Json$Decode$int)),
+	A2($elm$json$Json$Decode$field, 'uid', $elm$json$Json$Decode$int));
 var $author$project$ArticlesDecoder$articlesDecoder = $elm$json$Json$Decode$list($author$project$ArticlesDecoder$articleDecoder);
-var $author$project$Main$debugMode = true;
+var $author$project$Main$debugMode = false;
 var $author$project$Main$articlesUrl = $author$project$Main$debugMode ? 'http://127.0.0.1:8080/articles.json' : 'https://tsukimizake.github.io/articles.json';
 var $elm$json$Json$Decode$decodeString = _Json_runOnString;
 var $elm$http$Http$BadStatus_ = F2(
@@ -6593,7 +6594,7 @@ var $author$project$Main$articleView = F2(
 							_List_fromArray(
 								[
 									$elm$html$Html$text(
-									'投稿日:' + A2($author$project$Main$showTime, zone, post.cP))
+									'投稿日:' + A2($author$project$Main$showTime, zone, post.cQ))
 								])),
 							A2(
 							$elm$html$Html$ul,
@@ -6729,6 +6730,6 @@ var $author$project$Main$view = function (model) {
 	};
 };
 var $author$project$Main$main = $elm$browser$Browser$application(
-	{ce: $author$project$Main$init, cu: $author$project$Main$UrlChanged, cv: $author$project$Main$LinkClicked, cJ: $author$project$Main$subscriptions, cO: $author$project$Main$update, cQ: $author$project$Main$view});
+	{ce: $author$project$Main$init, cu: $author$project$Main$UrlChanged, cv: $author$project$Main$LinkClicked, cJ: $author$project$Main$subscriptions, cP: $author$project$Main$update, cR: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
