@@ -10,13 +10,14 @@ import ArticlesDecoder exposing (articlesDecoder)
 import Browser exposing (..)
 import Browser.Navigation as Nav
 import Html exposing (..)
-import Html.Attributes exposing (style)
+import Html.Attributes exposing (..)
 import Http exposing (..)
 import List
 import Markdown
 import Models exposing (..)
 import Time
 import Url as Url
+import Url.Parser as UP exposing ((</>))
 
 
 type Msg
@@ -123,14 +124,30 @@ articleView zone post =
         ]
 
 
-articlesView : Time.Zone -> List Article -> Html Msg
-articlesView zone articles =
-    ul [] <| List.map (articleView zone) articles
+articlesView : Time.Zone -> Url.Url -> List Article -> Html Msg
+articlesView zone url articles =
+    let
+        route =
+            UP.parse routeParser url
+    in
+    case route of
+        Just (BlogPost n) ->
+            let
+                article =
+                    List.filter (\x -> x.uid == n) articles
+            in
+            ul [] <| List.map (articleView zone) article
+
+        Just Profile ->
+            ul [] <| List.map (articleView zone) articles
+
+        Nothing ->
+            ul [] <| List.map (articleView zone) articles
 
 
 pageTitle : Html msg
 pageTitle =
-    div [ style "font-size" "x-large" ] [ text "ブログ予定地" ]
+    div [ style "font-size" "x-large" ] [ text "我々はどこから来たのか、我々は何者か、我々はなぜもふもふでないのか" ]
 
 
 myProfile : Html msg
@@ -153,6 +170,8 @@ myProfile =
             [ li [] [ text "なまえ: tsukimizake" ]
             , li [] [ text "最近の趣味: 柔術" ]
             , li [] [ text "将来の夢: 農家" ]
+            , li [] [ a [ href "/post/0" ] [ text "post0" ] ]
+            , li [] [ a [ href "/post/1" ] [ text "post1" ] ]
             ]
         ]
 
@@ -175,7 +194,20 @@ articlesUrl =
 
 view : Model -> Document Msg
 view model =
-    { title = "ブログ予定地", body = [ div [] [ myProfile, div [ mainMarginLeft ] [ pageTitle, articlesView jst model.articles ] ] ] }
+    { title = "ブログ予定地", body = [ div [] [ myProfile, div [ mainMarginLeft ] [ pageTitle, articlesView jst model.url model.articles ] ] ] }
+
+
+type Route
+    = BlogPost Int
+    | Profile
+
+
+routeParser : UP.Parser (Route -> a) a
+routeParser =
+    UP.oneOf
+        [ UP.map BlogPost <| UP.s "post" </> UP.int
+        , UP.map Profile <| UP.s "profile"
+        ]
 
 
 update : Msg -> Model -> ( Model, Cmd msg )
