@@ -1,9 +1,3 @@
--- TODO
--- markdown読み込み
--- math-markdownでの数学記号
--- 記事検索
-
-
 module Main exposing (main)
 
 import ArticlesDecoder exposing (articlesDecoder)
@@ -17,7 +11,7 @@ import Markdown
 import Models exposing (..)
 import Time
 import Url as Url
-import Url.Parser as UP exposing ((</>), (<?>))
+import Url.Parser as UP exposing ((<?>))
 import Url.Parser.Query as UQ
 
 
@@ -38,12 +32,10 @@ debugMode =
 
 
 type alias Model =
-    { articles : List Article, url : Url.Url, key : Nav.Key }
-
-
-mainMarginLeft : Attribute msg
-mainMarginLeft =
-    style "margin-left" "300px"
+    { articles : List Article
+    , url : Url.Url
+    , key : Nav.Key
+    }
 
 
 toIntMonth : Time.Month -> Int
@@ -139,37 +131,47 @@ articlesView zone url articles =
             in
             ul [] <| List.map (articleView zone) article
 
-        _ ->
+        Nothing ->
+            ul [] <| List.map (articleView zone) articles
+
+        Just (BlogPost Nothing) ->
+            ul [] <| List.map (articleView zone) articles
+
+        Just Profile ->
             ul [] <| List.map (articleView zone) articles
 
 
 pageTitle : Html msg
 pageTitle =
-    div [ style "font-size" "x-large" ] [ text "我々はどこから来たのか、我々は何者か、我々はなぜもふもふでないのか" ]
+    div [ class "pagetitle" ] [ text "我々はどこから来たのか、我々は何者か、我々はなぜもふもふでないのか" ]
 
 
 myProfile : Html msg
 myProfile =
-    div
-        [ style "height" "100%"
-        , style "background-color" "#F0F0F0"
-        , style "position" "fixed"
-        , style "z-index" "1"
-        , style "left" "0"
-        , style "top" "0"
-        , style "overflow-x" "hidden"
-        , style "padding-top" "60px"
-        , style "padding-right" "60px"
-        , style "padding-left" "30px"
-        , style "transition" "0.5s"
-        ]
-        [ div [] [ text "profile" ]
-        , ul []
+    div []
+        [ text "書いてる人"
+        , ul
+            []
             [ li [] [ text "なまえ: tsukimizake" ]
             , li [] [ text "最近の趣味: 柔術" ]
             , li [] [ text "将来の夢: 農家" ]
             ]
         ]
+
+
+articleList : Model -> Html msg
+articleList model =
+    div []
+        [ text "記事一覧"
+        , ul [] (List.map (\article -> li [] [ a [ href <| "?post=" ++ String.fromInt article.uid ] [ text article.title ] ]) model.articles)
+        ]
+
+
+leftMenu : Model -> Html msg
+leftMenu model =
+    div
+        [ class "leftMenu" ]
+        [ myProfile, articleList model ]
 
 
 jst : Time.Zone
@@ -190,7 +192,7 @@ articlesUrl =
 
 view : Model -> Document Msg
 view model =
-    { title = "ブログ予定地", body = [ div [] [ myProfile, div [ mainMarginLeft ] [ pageTitle, articlesView jst model.url model.articles ] ] ] }
+    { title = "ブログ予定地", body = [ div [] [ leftMenu model, div [ class "mainArticle" ] [ pageTitle, articlesView jst model.url model.articles ] ] ] }
 
 
 type Route
@@ -233,17 +235,13 @@ update msg model =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions model =
+subscriptions _ =
     Sub.none
 
 
 init : flags -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
-    let
-        homeurl =
-            { url | path = "" }
-    in
-    ( { articles = [], url = homeurl, key = key }, Cmd.batch [ Http.get { url = articlesUrl, expect = expectJson GotArticles articlesDecoder } ] )
+    ( { articles = [], url = url, key = key }, Cmd.batch [ Http.get { url = articlesUrl, expect = expectJson GotArticles articlesDecoder } ] )
 
 
 main : Platform.Program () Model Msg

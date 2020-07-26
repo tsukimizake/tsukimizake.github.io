@@ -1,0 +1,13 @@
+cradle:
+  cabal:
+    - path: "src"
+      component: "lib:archiever"
+
+    - path: "app/NewArticle.hs"
+      component: "archiever:exe:newArticle"
+
+    - path: "app/Archieve.hs"
+      component: "archiever:exe:archieve"
+
+    - path: "test"
+      component: "archiever:test:archiever-test"
