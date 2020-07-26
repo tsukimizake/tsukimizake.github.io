@@ -5478,6 +5478,7 @@ var $author$project$ArticlesDecoder$articleDecoder = A6(
 var $author$project$ArticlesDecoder$articlesDecoder = $elm$json$Json$Decode$list($author$project$ArticlesDecoder$articleDecoder);
 var $author$project$Main$debugMode = false;
 var $author$project$Main$articlesUrl = $author$project$Main$debugMode ? 'http://127.0.0.1:8080/articles.json' : 'https://tsukimizake.github.io/articles.json';
+var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$json$Json$Decode$decodeString = _Json_runOnString;
 var $elm$http$Http$BadStatus_ = F2(
 	function (a, b) {
@@ -6267,13 +6268,20 @@ var $elm$http$Http$get = function (r) {
 };
 var $author$project$Main$init = F3(
 	function (_v0, url, key) {
+		var homeurl = _Utils_update(
+			url,
+			{path: ''});
 		return _Utils_Tuple2(
-			{articles: _List_Nil, key: key, url: url},
-			$elm$http$Http$get(
-				{
-					expect: A2($elm$http$Http$expectJson, $author$project$Main$GotArticles, $author$project$ArticlesDecoder$articlesDecoder),
-					url: $author$project$Main$articlesUrl
-				}));
+			{articles: _List_Nil, key: key, url: homeurl},
+			$elm$core$Platform$Cmd$batch(
+				_List_fromArray(
+					[
+						$elm$http$Http$get(
+						{
+							expect: A2($elm$http$Http$expectJson, $author$project$Main$GotArticles, $author$project$ArticlesDecoder$articlesDecoder),
+							url: $author$project$Main$articlesUrl
+						})
+					])));
 	});
 var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
@@ -6281,7 +6289,6 @@ var $author$project$Main$subscriptions = function (model) {
 	return $elm$core$Platform$Sub$none;
 };
 var $elm$browser$Browser$Navigation$load = _Browser_load;
-var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $elm$browser$Browser$Navigation$pushUrl = _Browser_pushUrl;
 var $elm$url$Url$addPort = F2(
@@ -6786,43 +6793,45 @@ var $author$project$Main$BlogPost = function (a) {
 	return {$: 'BlogPost', a: a};
 };
 var $author$project$Main$Profile = {$: 'Profile'};
+var $elm$url$Url$Parser$Internal$Parser = function (a) {
+	return {$: 'Parser', a: a};
+};
+var $elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
+var $elm$url$Url$Parser$Query$custom = F2(
+	function (key, func) {
+		return $elm$url$Url$Parser$Internal$Parser(
+			function (dict) {
+				return func(
+					A2(
+						$elm$core$Maybe$withDefault,
+						_List_Nil,
+						A2($elm$core$Dict$get, key, dict)));
+			});
+	});
+var $elm$url$Url$Parser$Query$int = function (key) {
+	return A2(
+		$elm$url$Url$Parser$Query$custom,
+		key,
+		function (stringList) {
+			if (stringList.b && (!stringList.b.b)) {
+				var str = stringList.a;
+				return $elm$core$String$toInt(str);
+			} else {
+				return $elm$core$Maybe$Nothing;
+			}
+		});
+};
 var $elm$url$Url$Parser$Parser = function (a) {
 	return {$: 'Parser', a: a};
 };
-var $elm$url$Url$Parser$custom = F2(
-	function (tipe, stringToSomething) {
-		return $elm$url$Url$Parser$Parser(
-			function (_v0) {
-				var visited = _v0.visited;
-				var unvisited = _v0.unvisited;
-				var params = _v0.params;
-				var frag = _v0.frag;
-				var value = _v0.value;
-				if (!unvisited.b) {
-					return _List_Nil;
-				} else {
-					var next = unvisited.a;
-					var rest = unvisited.b;
-					var _v2 = stringToSomething(next);
-					if (_v2.$ === 'Just') {
-						var nextValue = _v2.a;
-						return _List_fromArray(
-							[
-								A5(
-								$elm$url$Url$Parser$State,
-								A2($elm$core$List$cons, next, visited),
-								rest,
-								params,
-								frag,
-								value(nextValue))
-							]);
-					} else {
-						return _List_Nil;
-					}
-				}
-			});
-	});
-var $elm$url$Url$Parser$int = A2($elm$url$Url$Parser$custom, 'NUMBER', $elm$core$String$toInt);
 var $elm$url$Url$Parser$mapState = F2(
 	function (func, _v0) {
 		var visited = _v0.visited;
@@ -6883,6 +6892,47 @@ var $elm$url$Url$Parser$oneOf = function (parsers) {
 				parsers);
 		});
 };
+var $elm$url$Url$Parser$query = function (_v0) {
+	var queryParser = _v0.a;
+	return $elm$url$Url$Parser$Parser(
+		function (_v1) {
+			var visited = _v1.visited;
+			var unvisited = _v1.unvisited;
+			var params = _v1.params;
+			var frag = _v1.frag;
+			var value = _v1.value;
+			return _List_fromArray(
+				[
+					A5(
+					$elm$url$Url$Parser$State,
+					visited,
+					unvisited,
+					params,
+					frag,
+					value(
+						queryParser(params)))
+				]);
+		});
+};
+var $elm$url$Url$Parser$slash = F2(
+	function (_v0, _v1) {
+		var parseBefore = _v0.a;
+		var parseAfter = _v1.a;
+		return $elm$url$Url$Parser$Parser(
+			function (state) {
+				return A2(
+					$elm$core$List$concatMap,
+					parseAfter,
+					parseBefore(state));
+			});
+	});
+var $elm$url$Url$Parser$questionMark = F2(
+	function (parser, queryParser) {
+		return A2(
+			$elm$url$Url$Parser$slash,
+			parser,
+			$elm$url$Url$Parser$query(queryParser));
+	});
 var $elm$url$Url$Parser$s = function (str) {
 	return $elm$url$Url$Parser$Parser(
 		function (_v0) {
@@ -6909,17 +6959,10 @@ var $elm$url$Url$Parser$s = function (str) {
 			}
 		});
 };
-var $elm$url$Url$Parser$slash = F2(
-	function (_v0, _v1) {
-		var parseBefore = _v0.a;
-		var parseAfter = _v1.a;
-		return $elm$url$Url$Parser$Parser(
-			function (state) {
-				return A2(
-					$elm$core$List$concatMap,
-					parseAfter,
-					parseBefore(state));
-			});
+var $elm$url$Url$Parser$top = $elm$url$Url$Parser$Parser(
+	function (state) {
+		return _List_fromArray(
+			[state]);
 	});
 var $author$project$Main$routeParser = $elm$url$Url$Parser$oneOf(
 	_List_fromArray(
@@ -6928,9 +6971,9 @@ var $author$project$Main$routeParser = $elm$url$Url$Parser$oneOf(
 			$elm$url$Url$Parser$map,
 			$author$project$Main$BlogPost,
 			A2(
-				$elm$url$Url$Parser$slash,
-				$elm$url$Url$Parser$s('post'),
-				$elm$url$Url$Parser$int)),
+				$elm$url$Url$Parser$questionMark,
+				$elm$url$Url$Parser$top,
+				$elm$url$Url$Parser$Query$int('post'))),
 			A2(
 			$elm$url$Url$Parser$map,
 			$author$project$Main$Profile,
@@ -6939,32 +6982,21 @@ var $author$project$Main$routeParser = $elm$url$Url$Parser$oneOf(
 var $author$project$Main$articlesView = F3(
 	function (zone, url, articles) {
 		var route = A2($elm$url$Url$Parser$parse, $author$project$Main$routeParser, url);
-		if (route.$ === 'Just') {
-			if (route.a.$ === 'BlogPost') {
-				var n = route.a.a;
-				var article = A2(
-					$elm$core$List$filter,
-					function (x) {
-						return _Utils_eq(x.uid, n);
-					},
-					articles);
-				return A2(
-					$elm$html$Html$ul,
-					_List_Nil,
-					A2(
-						$elm$core$List$map,
-						$author$project$Main$articleView(zone),
-						article));
-			} else {
-				var _v1 = route.a;
-				return A2(
-					$elm$html$Html$ul,
-					_List_Nil,
-					A2(
-						$elm$core$List$map,
-						$author$project$Main$articleView(zone),
-						articles));
-			}
+		if (((route.$ === 'Just') && (route.a.$ === 'BlogPost')) && (route.a.a.$ === 'Just')) {
+			var n = route.a.a.a;
+			var article = A2(
+				$elm$core$List$filter,
+				function (x) {
+					return _Utils_eq(x.uid, n);
+				},
+				articles);
+			return A2(
+				$elm$html$Html$ul,
+				_List_Nil,
+				A2(
+					$elm$core$List$map,
+					$author$project$Main$articleView(zone),
+					article));
 		} else {
 			return A2(
 				$elm$html$Html$ul,
@@ -6982,21 +7014,6 @@ var $elm$time$Time$Zone = F2(
 var $elm$time$Time$customZone = $elm$time$Time$Zone;
 var $author$project$Main$jst = A2($elm$time$Time$customZone, 9 * 60, _List_Nil);
 var $author$project$Main$mainMarginLeft = A2($elm$html$Html$Attributes$style, 'margin-left', '300px');
-var $elm$html$Html$a = _VirtualDom_node('a');
-var $elm$json$Json$Encode$string = _Json_wrap;
-var $elm$html$Html$Attributes$stringProperty = F2(
-	function (key, string) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			$elm$json$Json$Encode$string(string));
-	});
-var $elm$html$Html$Attributes$href = function (url) {
-	return A2(
-		$elm$html$Html$Attributes$stringProperty,
-		'href',
-		_VirtualDom_noJavaScriptUri(url));
-};
 var $author$project$Main$myProfile = A2(
 	$elm$html$Html$div,
 	_List_fromArray(
@@ -7047,38 +7064,6 @@ var $author$project$Main$myProfile = A2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text('将来の夢: 農家')
-						])),
-					A2(
-					$elm$html$Html$li,
-					_List_Nil,
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$a,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$href('/post/0')
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text('post0')
-								]))
-						])),
-					A2(
-					$elm$html$Html$li,
-					_List_Nil,
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$a,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$href('/post/1')
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text('post1')
-								]))
 						]))
 				]))
 		]));

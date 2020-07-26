@@ -17,7 +17,8 @@ import Markdown
 import Models exposing (..)
 import Time
 import Url as Url
-import Url.Parser as UP exposing ((</>))
+import Url.Parser as UP exposing ((</>), (<?>))
+import Url.Parser.Query as UQ
 
 
 type Msg
@@ -131,17 +132,14 @@ articlesView zone url articles =
             UP.parse routeParser url
     in
     case route of
-        Just (BlogPost n) ->
+        Just (BlogPost (Just n)) ->
             let
                 article =
                     List.filter (\x -> x.uid == n) articles
             in
             ul [] <| List.map (articleView zone) article
 
-        Just Profile ->
-            ul [] <| List.map (articleView zone) articles
-
-        Nothing ->
+        _ ->
             ul [] <| List.map (articleView zone) articles
 
 
@@ -170,8 +168,6 @@ myProfile =
             [ li [] [ text "なまえ: tsukimizake" ]
             , li [] [ text "最近の趣味: 柔術" ]
             , li [] [ text "将来の夢: 農家" ]
-            , li [] [ a [ href "/post/0" ] [ text "post0" ] ]
-            , li [] [ a [ href "/post/1" ] [ text "post1" ] ]
             ]
         ]
 
@@ -198,14 +194,14 @@ view model =
 
 
 type Route
-    = BlogPost Int
+    = BlogPost (Maybe Int)
     | Profile
 
 
 routeParser : UP.Parser (Route -> a) a
 routeParser =
     UP.oneOf
-        [ UP.map BlogPost <| UP.s "post" </> UP.int
+        [ UP.map BlogPost (UP.top <?> UQ.int "post")
         , UP.map Profile <| UP.s "profile"
         ]
 
@@ -243,7 +239,11 @@ subscriptions model =
 
 init : flags -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
-    ( { articles = [], url = url, key = key }, Http.get { url = articlesUrl, expect = expectJson GotArticles articlesDecoder } )
+    let
+        homeurl =
+            { url | path = "" }
+    in
+    ( { articles = [], url = homeurl, key = key }, Cmd.batch [ Http.get { url = articlesUrl, expect = expectJson GotArticles articlesDecoder } ] )
 
 
 main : Platform.Program () Model Msg
