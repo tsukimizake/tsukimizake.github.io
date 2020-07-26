@@ -98,14 +98,14 @@ import qualified Hoge as H
 
 各々の解説は省略する。よく知らない人は https://camlspotter.hatenablog.com/entry/20101212/1292165692 などを読むと良いだろう。
 
-1つめのimport Hogeは先駆者が述べているように読めなくなるのでやるべきではない。IDEが優秀な言語ならなんとでもなるだろうが、上記の通りhieは不安定なので使えないことが多々ある。
+1つめのimport Hogeは上記ブログで先駆者が述べているように読めなくなるのでやるべきではない。IDEが優秀な言語ならなんとでもなるだろうが、上記の通りhieは不安定なので使えないことが多々ある。
 我々のプロジェクトでは import Hoge (hoge)スタイルが主に使われていたが、これは
 - ソースコード中で Hogeモジュール内のhugaを新しく使う
 - import文に戻ってimport Hoge (hoge)をimport Hoge (hoge, huga)に変更する
 - 元の位置に戻る
 
 のループを気の狂うような回数やる羽目になるのでおすすめできない。
-そんなわけでqualified importを推奨する。
+そんなわけでimport qualified Hoge as Hのqualified importを推奨する。
 
 ## そのほか
 なんか続けて書くかもしれない
