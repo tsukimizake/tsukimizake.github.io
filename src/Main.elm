@@ -96,6 +96,18 @@ showTime zone time =
         ++ String.fromInt (Time.toSecond zone time)
 
 
+showDate : Time.Zone -> Time.Posix -> String
+showDate zone time =
+    String.fromInt (Time.toYear zone time)
+        ++ "/"
+        ++ (String.fromInt <|
+                toIntMonth <|
+                    Time.toMonth zone time
+           )
+        ++ "/"
+        ++ String.fromInt (Time.toDay zone time)
+
+
 articleView : Time.Zone -> Article -> Html Msg
 articleView zone post =
     let
@@ -163,7 +175,7 @@ articleList : Model -> Html msg
 articleList model =
     div []
         [ text "記事一覧"
-        , ul [] (List.map (\article -> li [] [ a [ href <| "?post=" ++ String.fromInt article.uid ] [ text article.title ] ]) model.articles)
+        , ul [] (List.map (\article -> li [] [ a [ href <| "?post=" ++ String.fromInt article.uid ] [ text <| article.title ++ " " ++ showDate jst article.updatedTime ] ]) model.articles)
         ]
 
 
