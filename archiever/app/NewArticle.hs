@@ -11,12 +11,17 @@ import qualified Data.List as L
 template :: String -> Int -> Time.LocalTime -> String
 template title uid time = "#title\n" 
   ++ title
-  ++ "\n#uid"
+  ++ "\n#uid\n"
   ++ show uid
   ++ "\n#tags\n\n"
   ++ "#updatedAt\n"
   ++ show time
-  ++ "\n#body\n"
+  ++ "\n#body\n\n"
+
+showTime :: Time.LocalTime -> String
+showTime Time.LocalTime {TimeOfDay {..}} = 
+  let withoutSec = Time.LocalTime {TimeOfDay {Time.todSec=0, ..}}
+  in show withoutSec
 
 findValidUid :: IO Int
 findValidUid = do
