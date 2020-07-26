@@ -24,7 +24,7 @@ jobs:
           key: key
   
       - run: curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
-      - run: source ~/.ghcup/env
-      - run: ghcup install 8.8.3
-      - run: cd ~/tsukimizake.github.io/archiever
-      - run: cabal v2-build && cabal v2-exec archieve
+             source ~/.ghcup/env
+             ghcup install 8.8.3
+             cd ~/tsukimizake.github.io/archiever
+             cabal v2-build && cabal v2-exec archieve
