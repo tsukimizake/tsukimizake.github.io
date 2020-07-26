@@ -21,13 +21,13 @@ jobs:
     steps:
       - name: Cache
         uses: actions/cache@v2.1.0
-          with:
-            # A list of files, directories, and wildcard patterns to cache and restore
-            path: [dist-newstyle, ~/.ghcup]
-            # An explicit key for restoring and saving the cache
-            key: key
+        with:
+          # A list of files, directories, and wildcard patterns to cache and restore
+          path: dist-newstyle　~/.ghcup
+          # An explicit key for restoring and saving the cache
+          key: key
   
-    - run: curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
-    - run: ghcup install 8.8.3
-    - run: cd ~/tsukimizake.github.io/archiever
-    - run: cabal v2-build && cabal v2-exec archieve
+      - run: curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+      - run: ghcup install 8.8.3
+      - run: cd ~/tsukimizake.github.io/archiever
+      - run: cabal v2-build && cabal v2-exec archieve
