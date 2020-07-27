@@ -20,19 +20,28 @@ jobs:
         uses: actions/cache@v2.1.0
         with:
           # A list of files, directories, and wildcard patterns to cache and restore
-          path: dist-newstyle　~/.ghcup
+          path: |
+            dist-newstyle
+            ~/.ghcup
           # An explicit key for restoring and saving the cache
-          key: key1
+          key: key0
       - run: 
           sudo apt install build-essential curl libffi-dev libffi6 libgmp-dev libgmp10 libncurses-dev libncurses5 libtinfo5;
           curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh;
           ~/.ghcup/bin/ghcup install 8.8.3;
           ~/.ghcup/bin/ghc --version;
-          pwd;
           cd $GITHUB_WORKSPACE/archiever;
-          pwd;
           ~/.ghcup/bin/cabal --with-compiler=/home/runner/.ghcup/bin/ghc v2-build;
           ~/.ghcup/bin/cabal --with-compiler=/home/runner/.ghcup/bin/ghc v2-test;
           ~/.ghcup/bin/cabal --with-compiler=/home/runner/.ghcup/bin/ghc v2-exec archieve
         env:
           PATH: "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/usr/share/rust/.cargo/bin:/home/runner/.config/composer/vendor/bin:/home/runner/.dotnet/tools:/snap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/.ghcup/bin"
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "apply archiever action" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
