@@ -27,8 +27,10 @@ jobs:
           sudo apt install build-essential curl libffi-dev libffi6 libgmp-dev libgmp10 libncurses-dev libncurses5 libtinfo5;
           curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh;
           ~/.ghcup/bin/ghcup install 8.8.3;
-          ~/.ghcup/bin/ghc --version
+          ~/.ghcup/bin/ghc --version;
+          pwd;
           cd $GITHUB_WORKSPACE/archiever;
+          pwd;
           ~/.ghcup/bin/cabal --with-compiler=/home/runner/.ghcup/bin/ghc v2-build;
           ~/.ghcup/bin/cabal --with-compiler=/home/runner/.ghcup/bin/ghc v2-test;
           ~/.ghcup/bin/cabal --with-compiler=/home/runner/.ghcup/bin/ghc v2-exec archieve
