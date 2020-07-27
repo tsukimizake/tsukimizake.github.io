@@ -29,5 +29,8 @@ jobs:
           ~/.ghcup/bin/ghcup install 8.8.3;
           echo $GITHUB_WORKSPACE;
           cd $GITHUB_WORKSPACE/archiever;
+          ~/.ghcup/bin/cabal v2-build;
+          ~/.ghcup/bin/cabal v2-test;
+          ~/.ghcup/bin/cabal v2-exec archieve
         env:
           PATH: "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/usr/share/rust/.cargo/bin:/home/runner/.config/composer/vendor/bin:/home/runner/.dotnet/tools:/snap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/.ghcup/bin"
