@@ -24,16 +24,15 @@ jobs:
           # An explicit key for restoring and saving the cache
           key: key
       - run: 
+          apt install build-essential curl libffi-dev libffi6 libgmp-dev libgmp10 libncurses-dev libncurses5 libtinfo5
           curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh;
           ~/.ghcup/bin/ghcup install 8.8.3;
-          ~/.ghcup/bin/cabal --version;
-          ~/.ghcup/bin/ghc --version;
-          cabal --version;
-          ghc --version;
           echo $GITHUB_WORKSPACE;
           cd $GITHUB_WORKSPACE/archiever;
-          ~/.ghcup/bin/cabal v2-build;
-          ~/.ghcup/bin/cabal v2-test;
-          ~/.ghcup/bin/cabal v2-exec archieve
+          which ghc;
+          echo $HOME;
+          ~/.ghcup/bin/cabal --with-compiler=/home/runner/work/.ghcup/bin/ghc v2-build;
+          ~/.ghcup/bin/cabal --with-compiler=/home/runner/work/.ghcup/bin/ghc v2-test;
+          ~/.ghcup/bin/cabal --with-compiler=/home/runner/work/.ghcup/bin/ghc v2-exec archieve
         env:
           PATH: "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/usr/share/rust/.cargo/bin:/home/runner/.config/composer/vendor/bin:/home/runner/.dotnet/tools:/snap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/.ghcup/bin"
