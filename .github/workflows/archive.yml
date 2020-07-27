@@ -24,7 +24,7 @@ jobs:
           # An explicit key for restoring and saving the cache
           key: key
       - run: 
-          apt install build-essential curl libffi-dev libffi6 libgmp-dev libgmp10 libncurses-dev libncurses5 libtinfo5
+          sudo apt install build-essential curl libffi-dev libffi6 libgmp-dev libgmp10 libncurses-dev libncurses5 libtinfo5;
           curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh;
           ~/.ghcup/bin/ghcup install 8.8.3;
           echo $GITHUB_WORKSPACE;
