@@ -23,11 +23,11 @@ jobs:
           path: dist-newstyle　~/.ghcup
           # An explicit key for restoring and saving the cache
           key: key
-      - env:
-          PATH: /home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/usr/share/rust/.cargo/bin:/home/runner/.config/composer/vendor/bin:/home/runner/.dotnet/tools:/snap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/.ghcup/bin
-      - run: |
+      - run: 
           echo $PATH
           curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
           ~/.ghcup/bin/ghcup install 8.8.3
           echo $GITHUB_WORKSPACE	
           cd $GITHUB_WORKSPACE/archiever
+        env:
+          PATH: "$PATH:~/.ghcup/bin"
