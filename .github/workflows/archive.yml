@@ -23,8 +23,9 @@ jobs:
           path: |
             dist-newstyle
             ~/.ghcup
+            ~/.cabal
           # An explicit key for restoring and saving the cache
-          key: key0
+          key: key2
       - run: |
           sudo apt install build-essential curl libffi-dev libffi6 libgmp-dev libgmp10 libncurses-dev libncurses5 libtinfo5
           curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
@@ -36,14 +37,14 @@ jobs:
           ~/.ghcup/bin/cabal --with-compiler=/home/runner/.ghcup/bin/ghc v2-exec archieve
         env:
           PATH: "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/usr/share/rust/.cargo/bin:/home/runner/.config/composer/vendor/bin:/home/runner/.dotnet/tools:/snap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/.ghcup/bin"
-      - name: Commit files
-        run: |
-          sudo apt install git
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git diff-index --quiet HEAD
-          git diff-index --quiet HEAD || git commit -m "apply archiever action" -a
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Commit files
+#        run: |
+#          sudo apt install git
+#          git config --local user.email "action@github.com"
+#          git config --local user.name "GitHub Action"
+#          git diff-index --quiet HEAD
+#          git diff-index --quiet HEAD || git commit -m "apply archiever action" -a
+#      - name: Push changes
+#        uses: ad-m/github-push-action@master
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
