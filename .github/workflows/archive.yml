@@ -24,9 +24,12 @@ jobs:
           # An explicit key for restoring and saving the cache
           key: key
       - run: 
-          echo $PATH;
           curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh;
           ~/.ghcup/bin/ghcup install 8.8.3;
+          ~/.ghcup/bin/cabal --version;
+          ~/.ghcup/bin/ghc --version;
+          cabal --version;
+          ghc --version;
           echo $GITHUB_WORKSPACE;
           cd $GITHUB_WORKSPACE/archiever;
           ~/.ghcup/bin/cabal v2-build;
