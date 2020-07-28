@@ -19,3 +19,14 @@ jobs:
     - name: Setup Elm
       uses: justgook/setup-elm@1.2.0
     - run: elm make --output=Main.js --optimize src/Main.elm
+    - name: Commit files
+      run: |
+        sudo apt install git
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add -A
+        git diff-index --quiet HEAD || git commit -m "apply archiever action" -a
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
