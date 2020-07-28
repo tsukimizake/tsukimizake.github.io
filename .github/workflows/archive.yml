@@ -1,0 +1,63 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: test and run archiever
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache
+        uses: actions/cache@v2.1.0
+        with:
+          # A list of files, directories, and wildcard patterns to cache and restore
+          path: |
+            dist-newstyle
+            ~/.ghcup
+            ~/.cabal
+          # An explicit key for restoring and saving the cache
+          key: key2
+      - name: install build depends
+        run: |
+          sudo apt install build-essential curl libffi-dev libffi6 libgmp-dev libgmp10 libncurses-dev libncurses5 libtinfo5
+          curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+          ~/.ghcup/bin/ghcup install 8.8.3
+          ~/.ghcup/bin/ghc --version
+      - name: build    
+        run: |
+          cd $GITHUB_WORKSPACE/archiever
+          ~/.ghcup/bin/cabal --with-compiler=/home/runner/.ghcup/bin/ghc v2-build
+        env:
+          PATH: "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/usr/share/rust/.cargo/bin:/home/runner/.config/composer/vendor/bin:/home/runner/.dotnet/tools:/snap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/.ghcup/bin"
+      - name: test
+        run: |
+          cd $GITHUB_WORKSPACE/archiever      
+          ~/.ghcup/bin/cabal --with-compiler=/home/runner/.ghcup/bin/ghc v2-test
+        env:
+          PATH: "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/usr/share/rust/.cargo/bin:/home/runner/.config/composer/vendor/bin:/home/runner/.dotnet/tools:/snap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/.ghcup/bin"
+      - name: run archieve
+        run: |
+          cd $GITHUB_WORKSPACE/archiever          
+          ~/.ghcup/bin/cabal --with-compiler=/home/runner/.ghcup/bin/ghc v2-exec archieve
+        env:
+          PATH: "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/usr/share/rust/.cargo/bin:/home/runner/.config/composer/vendor/bin:/home/runner/.dotnet/tools:/snap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/.ghcup/bin"
+      - name: Commit files
+        run: |
+          sudo apt install git
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git diff-index --quiet HEAD || git commit -m "apply archiever action" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
