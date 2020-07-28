@@ -37,5 +37,21 @@
 }
 
 .articleText {
-  margin-right: 10%;
+  margin-right: 5%;
 }
+
+
+@media only screen and (max-width: 700px) {
+     
+  .leftMenu {
+    visibility: hidden;
+  }
+ 
+  .main {
+    margin-left: 0%;
+    width: 100%;
+  }
+  .rootWrapper {
+    margin-left: 0%;
+  }
+} /* デバイスの横幅が700px以下(スマートフォン)の場合サイドバー非表示 */
