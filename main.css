@@ -53,5 +53,6 @@
   }
   .rootWrapper {
     margin-left: 0%;
+    user-zoom: zoom;
   }
 } /* デバイスの横幅が700px以下(スマートフォン)の場合サイドバー非表示 */
