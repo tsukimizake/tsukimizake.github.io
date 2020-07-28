@@ -208,7 +208,7 @@ view model =
     , body =
         [ div [ class "rootWrapper" ]
             [ leftMenu model
-            , div [ class "mainArticle" ] [ pageTitle, articlesView jst model.url model.articles ]
+            , div [] [ pageTitle, articlesView jst model.url model.articles ]
             ]
         ]
     }
