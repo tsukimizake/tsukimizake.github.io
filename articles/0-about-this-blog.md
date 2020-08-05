@@ -39,7 +39,7 @@ TODOは
 
 - 単記事へのリンク DONE
 
-- 数式表示 $begin-display$ a^2 = b^2 + c^2 $end-display$
+- 数式表示 $begin-display$ a^2 = b^2 + c^2 $end-display$ katexをUrlChange時に毎回呼びたい
 
 - タイトルが小さくて記事の区切りがわかりにくい DONE
 
