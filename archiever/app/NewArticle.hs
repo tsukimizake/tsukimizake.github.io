@@ -20,10 +20,10 @@ template title uid time =
     ++ showTime time
     ++ "\n#body\n\n"
 
+--  drop seconds 2020-08-04 15:10:0223884 => 2020-08-04 15:10
 showTime :: Time.LocalTime -> String
-showTime Time.LocalTime {Time.localTimeOfDay = Time.TimeOfDay {..}, ..} =
-  let withoutSec = Time.LocalTime {Time.localTimeOfDay = Time.TimeOfDay {Time.todSec = 0, ..}, ..}
-   in show withoutSec
+showTime =
+  reverse . drop 1 . dropWhile (/= ':') . reverse . show
 
 findValidUid :: IO Int
 findValidUid = do
