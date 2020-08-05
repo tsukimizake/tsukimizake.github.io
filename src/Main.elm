@@ -233,7 +233,7 @@ update msg model =
         GotArticles result ->
             case result of
                 Ok articles ->
-                    ( { model | articles = articles }, Cmd.none )
+                    ( { model | articles = List.reverse <| List.sortBy (\article -> article.uid) articles }, Cmd.none )
 
                 Err _ ->
                     ( model, Cmd.none )
