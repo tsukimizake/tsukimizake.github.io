@@ -18,3 +18,4 @@ data Article = Article
   deriving (Show, Generic)
 
 instance J.ToJSON Article
+

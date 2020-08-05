@@ -40,4 +40,5 @@ main = do
       let distPath = "../articles.json"
       IO.writeFile distPath $ LT.unpack xs
       putStrLn "DONE!"
+
     Left err -> print err -- TODO どのarticleでエラー出たか表示

@@ -39,6 +39,7 @@ main = do
   time <- Time.zonedTimeToLocalTime <$> Time.getZonedTime
   uid <- findValidUid
   writeFile ("../articles/" ++ show uid ++ "-" ++ title ++ ".md") (template title uid time)
+  
   where
     stripSeq :: F.Pico -> F.Pico
     stripSeq x = F.MkFixed $ floor x

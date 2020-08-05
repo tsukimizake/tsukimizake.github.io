@@ -171,4 +171,4 @@ test-suite archiever-test
     OverloadedStrings
     BlockArguments
     ScopedTypeVariables
-
+  test-show-details: direct
