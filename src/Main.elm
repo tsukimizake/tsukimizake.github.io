@@ -1,4 +1,4 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 import ArticlesDecoder exposing (articlesDecoder)
 import Browser exposing (..)
@@ -227,6 +227,9 @@ routeParser =
         ]
 
 
+port callKatex : () -> Cmd msg
+
+
 update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
     case msg of
@@ -242,7 +245,7 @@ update msg model =
             ( model, Cmd.none )
 
         UrlChanged url ->
-            ( { model | url = url }, Cmd.none )
+            Debug.log "uc" ( { model | url = url }, callKatex () )
 
         LinkClicked req ->
             case req of

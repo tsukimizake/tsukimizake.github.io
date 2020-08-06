@@ -29,6 +29,13 @@
 
 		var root = document.getElementById('main');
 		var app = Elm.Main.init({node: root, flags:  { width:  1200, height: 900 }});
+  app.ports.callKatex.subscribe(function(data) {
+      console.log('run katex');
+      renderMathInElement(document.body, {delimiters: 
+        [{left: "$begin-inline$", right: "$end-inline$", display: false},{left: "$begin-display$", right: "$end-display$", display: true}]
+      });
+  });
+
   setTimeout(function () {
       console.log('run katex');
       renderMathInElement(document.body, {delimiters: 
