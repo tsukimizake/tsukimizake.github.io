@@ -245,7 +245,7 @@ update msg model =
             ( model, Cmd.none )
 
         UrlChanged url ->
-            Debug.log "uc" ( { model | url = url }, callKatex () )
+            ( { model | url = url }, callKatex () )
 
         LinkClicked req ->
             case req of

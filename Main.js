@@ -6292,7 +6292,6 @@ var $author$project$Main$callKatex = _Platform_outgoingPort(
 		return $elm$json$Json$Encode$null;
 	});
 var $elm$browser$Browser$Navigation$load = _Browser_load;
-var $elm$core$Debug$log = _Debug_log;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $elm$browser$Browser$Navigation$pushUrl = _Browser_pushUrl;
 var $elm$core$List$sortBy = _List_sortBy;
@@ -6367,14 +6366,11 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 			case 'UrlChanged':
 				var url = msg.a;
-				return A2(
-					$elm$core$Debug$log,
-					'uc',
-					_Utils_Tuple2(
-						_Utils_update(
-							model,
-							{url: url}),
-						$author$project$Main$callKatex(_Utils_Tuple0)));
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{url: url}),
+					$author$project$Main$callKatex(_Utils_Tuple0));
 			default:
 				var req = msg.a;
 				if (req.$ === 'Internal') {
