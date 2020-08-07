@@ -61,20 +61,20 @@ hie-8.6.5: loadObj: /private/var/folders/wc/8z0pjlgn1gz1wgdvptgpnz980000gn/T/ghc
 
 まず、servantのヘッダの型定義で
 
-```
+```hs
 type ReportHeaders =
     Header "hoge" (HeaderObject Int) 
     ': Header "huga" (HeaderObject Int) 
     ...(同様のものが15個ほど続く)
 ```
 
-のようなコードをフォーマットしようとするとなぜか死ぬほど遅い(1ファイルに数十分かかる)。
+のような括弧を含むコードをフォーマットしようとするとなぜか死ぬほど遅い(1ファイルに数十分かかる)。
 
-```
+```hs
 type HeaderObjectInt = HeaderObject Int
 ```
 
-のように定義したtype aliasを渡すというワークアラウンドを行っていた。
+のようにtype aliasを定義して渡し、括弧をなくすワークアラウンドを行っていた。
 
 
 また、上ほど致命的な遅さではないが、テストコードなどでdoのネストが深くてひとかたまりが長いコードはフォーマットが遅く、1000行ほどのファイルで30秒~40秒ほどかかっていた。
@@ -88,7 +88,7 @@ type HeaderObjectInt = HeaderObject Int
 ### qualified importを使え
 haskellのimportの書き方は色々あるが、実用的には以下の3種だろう。
 
-```
+```hs
 import Hoge
 
 import Hoge (hoge)
