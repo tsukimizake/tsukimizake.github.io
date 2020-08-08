@@ -9,15 +9,17 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet"
   href="./main.css">
+  <link rel="stylesheet" href="./highlight/styles/default.css">
+  <script src="./highlight/highlight.pack.js"></script>
   <style>
       /* LaTeX display environment will effect the LaTeX characters but not the layout on the page */
       span.katex-display {
         display: inherit; /* You may comment this out if you want the default behavior */
       }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
-    <title></title>
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+  <title></title>
  </head>
 	<body>
 
@@ -29,15 +31,15 @@
 
 		var root = document.getElementById('main');
 		var app = Elm.Main.init({node: root, flags:  { width:  1200, height: 900 }});
-  app.ports.callKatex.subscribe(function(data) {
-      console.log('run katex');
+  app.ports.onUrlChange.subscribe(function(data) {
+      hljs.initHighlighting();
       renderMathInElement(document.body, {delimiters: 
         [{left: "$begin-inline$", right: "$end-inline$", display: false},{left: "$begin-display$", right: "$end-display$", display: true}]
       });
   });
 
   setTimeout(function () {
-      console.log('run katex');
+      hljs.initHighlighting();
       renderMathInElement(document.body, {delimiters: 
         [{left: "$begin-inline$", right: "$end-inline$", display: false},{left: "$begin-display$", right: "$end-display$", display: true}]
       })}, 300);

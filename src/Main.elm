@@ -227,7 +227,7 @@ routeParser =
         ]
 
 
-port callKatex : () -> Cmd msg
+port onUrlChange : () -> Cmd msg
 
 
 update : Msg -> Model -> ( Model, Cmd msg )
@@ -245,7 +245,7 @@ update msg model =
             ( model, Cmd.none )
 
         UrlChanged url ->
-            ( { model | url = url }, callKatex () )
+            ( { model | url = url }, onUrlChange () )
 
         LinkClicked req ->
             case req of

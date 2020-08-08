@@ -21,7 +21,7 @@ haskell
 これは他でもよく言われているが、stack buildは--fast引数を付けることで最適化を省略してコンパイル時間を短縮することができる。
 このプロジェクトのフルビルドだと
 
-```
+```sh
 > time stack build
 ...
 stack build  580.22s user 26.21s system 100% cpu 10:02.25 total
@@ -42,7 +42,7 @@ stack build --fast  134.03s user 17.14s system 104% cpu 2:24.58 total
 遅いだけならまだしも不安定で、
 何度再起動しても以下のようなエラーを吐いて直らない場合がある。
 
-```
+```text
 hie-8.6.5: loadObj: /private/var/folders/wc/8z0pjlgn1gz1wgdvptgpnz980000gn/T/ghc86703_0/ghc_571.o: file doesn't exist
 2020-05-08 12:49:13.274435 [ThreadId 31] - Scheduler thread exited unexpectedly: loadObj "/private/var/folders/wc/8z0pjlgn1gz1wgdvptgpnz980000gn/T/ghc86703_0/ghc_571.o": failed
 ```
@@ -61,16 +61,16 @@ hie-8.6.5: loadObj: /private/var/folders/wc/8z0pjlgn1gz1wgdvptgpnz980000gn/T/ghc
 
 まず、servantのヘッダの型定義で
 
-```hs
+```haskell
 type ReportHeaders =
     Header "hoge" (HeaderObject Int) 
     ': Header "huga" (HeaderObject Int) 
-    ...(同様のものが15個ほど続く)
+    -- (同様のものが15個ほど続く)
 ```
 
 のような括弧を含むコードをフォーマットしようとするとなぜか死ぬほど遅い(1ファイルに数十分かかる)。
 
-```hs
+```haskell
 type HeaderObjectInt = HeaderObject Int
 ```
 
@@ -88,7 +88,7 @@ type HeaderObjectInt = HeaderObject Int
 ### qualified importを使え
 haskellのimportの書き方は色々あるが、実用的には以下の3種だろう。
 
-```hs
+```haskell
 import Hoge
 
 import Hoge (hoge)
