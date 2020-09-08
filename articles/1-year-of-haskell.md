@@ -35,6 +35,8 @@ stack build --fast  134.03s user 17.14s system 104% cpu 2:24.58 total
 
 ### hieを信じるな
 
+(2020/9/9追記: hieの後継として開発されている[hls](https://github.com/haskell/haskell-language-server)がとても優秀なのでこの項はdeprecatedです)
+
 まずhieは遅い。
 
 特にemacsだとlsp-modeがhieを同期的に呼ぶため、ファイル保存や補完などのたびに数秒固まっていた。私はこれが理由でneovimに移行している。
