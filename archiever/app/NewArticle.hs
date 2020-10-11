@@ -11,14 +11,14 @@ import qualified System.IO as IO
 
 template :: String -> Int -> Time.LocalTime -> String
 template title uid time =
-  "#title\n"
+  "# title\n"
     ++ title
-    ++ "\n#uid\n"
+    ++ "\n# uid\n"
     ++ show uid
-    ++ "\n#tags\n\n"
+    ++ "\n# tags\n\n"
     ++ "#updatedAt\n"
     ++ showTime time
-    ++ "\n#body\n\n"
+    ++ "\n# body\n\n"
 
 --  drop seconds 2020-08-04 15:10:0223884 => 2020-08-04 15:10
 showTime :: Time.LocalTime -> String
