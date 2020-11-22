@@ -18,9 +18,13 @@ jobs:
     - uses: actions/checkout@v2
     - name: Setup Elm
       uses: justgook/setup-elm@1.2.0
+      with:
+        elm-version: 0.19.1
+        cache: true
     - run: elm make --output=Main.js --optimize src/Main.elm
     - name: Commit files
       run: |
+        ACTIONS_ALLOW_UNSECURE_COMMANDS=true
         sudo apt install git
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
