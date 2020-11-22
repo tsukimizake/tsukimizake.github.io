@@ -16,12 +16,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - run: ACTIONS_ALLOW_UNSECURE_COMMANDS=true
-    - name: Setup Elm
-      uses: justgook/setup-elm@1.2.0
+    - name: Setup Elm environment
+      uses: JorelAli/setup-elm@v2
       with:
         elm-version: 0.19.1
-        cache: true
     - run: elm make --output=Main.js --optimize src/Main.elm
     - name: Commit files
       run: |
