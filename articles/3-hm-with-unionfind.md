@@ -1,5 +1,5 @@
 # title
-hm-with-unionfind
+Unionfindを使ってHM型推論を書いた
 # uid
 3
 # tags
