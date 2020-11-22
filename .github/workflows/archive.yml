@@ -27,6 +27,7 @@ jobs:
           key: key2
       - name: build
         run: |
+          cabal update
           cd $GITHUB_WORKSPACE/archiever
           cabal v2-build
       - name: test
