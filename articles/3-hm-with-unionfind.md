@@ -12,7 +12,7 @@ HM型推論を書くとき教科書通りにASTをトラバースして型変数
 [Efficient and insightful generation](http://okmij.org/ftp/ML/generalization.html#gen-mismanagement)
 を読んでなるほどなあとなり、haskellでsound-eagerのアルゴリズムを実装してみたのが以下。
 
-[tsukimizake/sound-eager][https://github.com/tsukimizake/sound-eager]
+[tsukimizake/sound-eager](https://github.com/tsukimizake/sound-eager)
 
 型変数が指す型をref型で持つことによって、同じ型を指す型変数を一度にアップデートしている。 
 これをhaskellで書くにあたってIORefを使った。型推論を行う部分が全部IOになるのはSTRef使ってST型にしろという話だが、それでもRefの部分をshowしたくなったら`unsafePerformIO . unsafeSTToIO`が必要になりそうとかそもそもhaskellでRefを持ち回って手続き的にやるのはださくないかとか色々言いたくなる。
