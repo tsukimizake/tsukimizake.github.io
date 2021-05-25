@@ -1858,8 +1858,8 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 		flagDecoder,
 		args,
 		impl.cg,
-		impl.cQ,
-		impl.cL,
+		impl.cR,
+		impl.cM,
 		function() { return function() {} }
 	);
 });
@@ -3929,10 +3929,10 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 		flagDecoder,
 		args,
 		impl.cg,
-		impl.cQ,
-		impl.cL,
+		impl.cR,
+		impl.cM,
 		function(sendToApp, initialModel) {
-			var view = impl.cR;
+			var view = impl.cS;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3965,11 +3965,11 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 		flagDecoder,
 		args,
 		impl.cg,
-		impl.cQ,
-		impl.cL,
+		impl.cR,
+		impl.cM,
 		function(sendToApp, initialModel) {
 			var divertHrefToApp = impl.aO && impl.aO(sendToApp)
-			var view = impl.cR;
+			var view = impl.cS;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -4038,8 +4038,8 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.cw;
-	var onUrlRequest = impl.cx;
+	var onUrlChange = impl.cx;
+	var onUrlRequest = impl.cy;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
@@ -4073,9 +4073,9 @@ function _Browser_application(impl)
 		{
 			return A3(impl.cg, flags, _Browser_getUrl(), key);
 		},
+		cS: impl.cS,
 		cR: impl.cR,
-		cQ: impl.cQ,
-		cL: impl.cL
+		cM: impl.cM
 	});
 }
 
@@ -4375,7 +4375,7 @@ var _Http_toTask = F3(function(router, toTask, request)
 		$elm$core$Maybe$isJust(request.bJ) && _Http_track(router, xhr, request.bJ.a);
 
 		try {
-			xhr.open(request.cj, request.ay, true);
+			xhr.open(request.ck, request.ay, true);
 		} catch (e) {
 			return done($elm$http$Http$BadUrl_(request.ay));
 		}
@@ -4398,7 +4398,7 @@ function _Http_configureRequest(xhr, request)
 	{
 		xhr.setRequestHeader(headers.a.a, headers.a.b);
 	}
-	xhr.timeout = request.cP.a || 0;
+	xhr.timeout = request.cQ.a || 0;
 	xhr.responseType = request.b5.d;
 	xhr.withCredentials = request.bT;
 }
@@ -4422,8 +4422,8 @@ function _Http_toMetadata(xhr)
 {
 	return {
 		ay: xhr.responseURL,
-		cI: xhr.status,
-		cJ: xhr.statusText,
+		cJ: xhr.status,
+		cK: xhr.statusText,
 		cc: _Http_parseHeaders(xhr.getAllResponseHeaders())
 	};
 }
@@ -4519,14 +4519,14 @@ function _Http_track(router, xhr, tracker)
 	xhr.upload.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Sending({
-			cG: event.loaded,
+			cH: event.loaded,
 			bD: event.total
 		}))));
 	});
 	xhr.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Receiving({
-			cA: event.loaded,
+			cB: event.loaded,
 			bD: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
 		}))));
 	});
@@ -4623,10 +4623,10 @@ function _Markdown_formatOptions(options)
 	return {
 		highlight: toHighlight,
 		gfm: gfm,
-		tables: gfm && gfm.cM,
+		tables: gfm && gfm.cN,
 		breaks: gfm && gfm.bX,
-		sanitize: options.cF,
-		smartypants: options.cH
+		sanitize: options.cG,
+		smartypants: options.cI
 	};
 }
 
@@ -5438,21 +5438,22 @@ var $elm$browser$Browser$application = _Browser_application;
 var $author$project$Main$GotArticles = function (a) {
 	return {$: 0, a: a};
 };
-var $author$project$Models$Article = F5(
-	function (title, tags, articleText, updatedTime, uid) {
-		return {bV: articleText, cO: tags, aT: title, aU: uid, bL: updatedTime};
+var $author$project$Models$Article = F6(
+	function (title, tags, articleText, updatedTime, uid, isDraft) {
+		return {bV: articleText, ci: isDraft, cP: tags, aT: title, aU: uid, bL: updatedTime};
 	});
+var $elm$json$Json$Decode$bool = _Json_decodeBool;
 var $elm$json$Json$Decode$field = _Json_decodeField;
 var $elm$json$Json$Decode$int = _Json_decodeInt;
 var $elm$json$Json$Decode$list = _Json_decodeList;
-var $elm$json$Json$Decode$map5 = _Json_map5;
+var $elm$json$Json$Decode$map6 = _Json_map6;
 var $elm$time$Time$Posix = $elm$core$Basics$identity;
 var $elm$time$Time$millisToPosix = $elm$core$Basics$identity;
 var $elm$json$Json$Decode$string = _Json_decodeString;
 var $author$project$Models$OtherTag = $elm$core$Basics$identity;
 var $author$project$ArticlesDecoder$tagDecoder = A2($elm$json$Json$Decode$map, $elm$core$Basics$identity, $elm$json$Json$Decode$string);
-var $author$project$ArticlesDecoder$articleDecoder = A6(
-	$elm$json$Json$Decode$map5,
+var $author$project$ArticlesDecoder$articleDecoder = A7(
+	$elm$json$Json$Decode$map6,
 	$author$project$Models$Article,
 	A2($elm$json$Json$Decode$field, 'title', $elm$json$Json$Decode$string),
 	A2(
@@ -5464,7 +5465,8 @@ var $author$project$ArticlesDecoder$articleDecoder = A6(
 		$elm$json$Json$Decode$field,
 		'updatedTime',
 		A2($elm$json$Json$Decode$map, $elm$time$Time$millisToPosix, $elm$json$Json$Decode$int)),
-	A2($elm$json$Json$Decode$field, 'uid', $elm$json$Json$Decode$int));
+	A2($elm$json$Json$Decode$field, 'uid', $elm$json$Json$Decode$int),
+	A2($elm$json$Json$Decode$field, 'isDraft', $elm$json$Json$Decode$bool));
 var $author$project$ArticlesDecoder$articlesDecoder = $elm$json$Json$Decode$list($author$project$ArticlesDecoder$articleDecoder);
 var $author$project$Main$debugMode = false;
 var $author$project$Main$articlesUrl = $author$project$Main$debugMode ? 'http://127.0.0.1:8080/articles.json' : 'https://tsukimizake.github.io/articles.json';
@@ -6061,7 +6063,7 @@ var $elm$http$Http$resolve = F2(
 			case 3:
 				var metadata = response.a;
 				return $elm$core$Result$Err(
-					$elm$http$Http$BadStatus(metadata.cI));
+					$elm$http$Http$BadStatus(metadata.cJ));
 			default:
 				var body = response.b;
 				return A2(
@@ -6224,8 +6226,8 @@ var $elm$http$Http$cmdMap = F2(
 					bW: r.bW,
 					b5: A2(_Http_mapExpect, func, r.b5),
 					cc: r.cc,
-					cj: r.cj,
-					cP: r.cP,
+					ck: r.ck,
+					cQ: r.cQ,
 					bJ: r.bJ,
 					ay: r.ay
 				});
@@ -6250,11 +6252,11 @@ var $elm$http$Http$subscription = _Platform_leaf('Http');
 var $elm$http$Http$request = function (r) {
 	return $elm$http$Http$command(
 		$elm$http$Http$Request(
-			{bT: false, bW: r.bW, b5: r.b5, cc: r.cc, cj: r.cj, cP: r.cP, bJ: r.bJ, ay: r.ay}));
+			{bT: false, bW: r.bW, b5: r.b5, cc: r.cc, ck: r.ck, cQ: r.cQ, bJ: r.bJ, ay: r.ay}));
 };
 var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
-		{bW: $elm$http$Http$emptyBody, b5: r.b5, cc: _List_Nil, cj: 'GET', cP: $elm$core$Maybe$Nothing, bJ: $elm$core$Maybe$Nothing, ay: r.ay});
+		{bW: $elm$http$Http$emptyBody, b5: r.b5, cc: _List_Nil, ck: 'GET', cQ: $elm$core$Maybe$Nothing, bJ: $elm$core$Maybe$Nothing, ay: r.ay});
 };
 var $author$project$Main$init = F3(
 	function (_v0, url, key) {
@@ -6585,16 +6587,16 @@ var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm_explorations$markdown$Markdown$defaultOptions = {
 	a0: $elm$core$Maybe$Nothing,
 	cb: $elm$core$Maybe$Just(
-		{bX: false, cM: false}),
-	cF: true,
-	cH: false
+		{bX: false, cN: false}),
+	cG: true,
+	cI: false
 };
 var $elm_explorations$markdown$Markdown$toHtmlWith = _Markdown_toHtml;
 var $elm_explorations$markdown$Markdown$toHtml = $elm_explorations$markdown$Markdown$toHtmlWith($elm_explorations$markdown$Markdown$defaultOptions);
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $author$project$Main$articleView = F2(
 	function (zone, post) {
-		var tags = A2($elm$core$List$map, $author$project$Models$showTag, post.cO);
+		var tags = A2($elm$core$List$map, $author$project$Models$showTag, post.cP);
 		var tagsView = A2(
 			$elm$core$List$map,
 			function (s) {
@@ -7166,6 +7168,6 @@ var $author$project$Main$view = function (model) {
 	};
 };
 var $author$project$Main$main = $elm$browser$Browser$application(
-	{cg: $author$project$Main$init, cw: $author$project$Main$UrlChanged, cx: $author$project$Main$LinkClicked, cL: $author$project$Main$subscriptions, cQ: $author$project$Main$update, cR: $author$project$Main$view});
+	{cg: $author$project$Main$init, cx: $author$project$Main$UrlChanged, cy: $author$project$Main$LinkClicked, cM: $author$project$Main$subscriptions, cR: $author$project$Main$update, cS: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
