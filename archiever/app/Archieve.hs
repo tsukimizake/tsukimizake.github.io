@@ -1,5 +1,6 @@
 module Main where
 
+import Control.Monad
 import qualified Data.Aeson as J
 import qualified Data.Aeson.Text as JT
 import Data.Either
@@ -15,15 +16,9 @@ import System.Exit
 import qualified System.IO as IO
 import qualified Text.Parsec as P
 
-archieveArticles :: [String] -> Either [P.ParseError] J.Value
-archieveArticles contents = do
-  let parseResults :: ([Either P.ParseError Article]) = map (parseContents . T.pack) contents
-  let errs = lefts parseResults
-  if not $ null errs
-    then Left errs
-    else do
-      let articles = rights parseResults
-      Right $ J.toJSON articles
+parseArticles :: [String] -> [Either P.ParseError Article]
+parseArticles contents = do
+  map (parseContents . T.pack) contents
 
 endsWith :: String -> String -> Bool
 endsWith short long = M.isJust $ L.stripPrefix (reverse short) (reverse long)
@@ -33,11 +28,13 @@ main = do
   files <- Dir.listDirectory "../articles"
   let mds = map ("../articles/" ++) $ filter (endsWith ".md") files
   contents :: [String] <- mapM IO.readFile mds
-  let articles = archieveArticles contents
-  case articles of
-    Right res -> do
-      let xs = JT.encodeToLazyText res
+  let articles = parseArticles contents
+  if all isRight articles
+    then do
+      let archived = filter (not . isDraft) $ rights articles
+      let xs = JT.encodeToLazyText archived
       let distPath = "../articles.json"
       IO.writeFile distPath $ LT.unpack xs
       putStrLn "DONE!"
-    Left err -> print err -- TODO どのarticleでエラー出たか表示
+    else do
+      print $ filter (\(_, article) -> isLeft article) $ zip mds articles
