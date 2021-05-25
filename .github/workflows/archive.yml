@@ -22,34 +22,22 @@ jobs:
           # A list of files, directories, and wildcard patterns to cache and restore
           path: |
             dist-newstyle
-            ~/.ghcup
             ~/.cabal
           # An explicit key for restoring and saving the cache
           key: key2
-      - name: install build depends
+      - name: build
         run: |
-          sudo apt install build-essential curl libffi-dev libffi6 libgmp-dev libgmp10 libncurses-dev libncurses5 libtinfo5
-          curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
-          ~/.ghcup/bin/ghcup install 8.8.3
-          ~/.ghcup/bin/ghc --version
-      - name: build    
-        run: |
+          cabal update
           cd $GITHUB_WORKSPACE/archiever
-          ~/.ghcup/bin/cabal --with-compiler=/home/runner/.ghcup/bin/ghc v2-build
-        env:
-          PATH: "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/usr/share/rust/.cargo/bin:/home/runner/.config/composer/vendor/bin:/home/runner/.dotnet/tools:/snap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/.ghcup/bin"
+          cabal v2-build
       - name: test
         run: |
           cd $GITHUB_WORKSPACE/archiever      
-          ~/.ghcup/bin/cabal --with-compiler=/home/runner/.ghcup/bin/ghc v2-test
-        env:
-          PATH: "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/usr/share/rust/.cargo/bin:/home/runner/.config/composer/vendor/bin:/home/runner/.dotnet/tools:/snap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/.ghcup/bin"
+          cabal v2-test
       - name: run archieve
         run: |
           cd $GITHUB_WORKSPACE/archiever          
-          ~/.ghcup/bin/cabal --with-compiler=/home/runner/.ghcup/bin/ghc v2-exec archieve
-        env:
-          PATH: "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/usr/share/rust/.cargo/bin:/home/runner/.config/composer/vendor/bin:/home/runner/.dotnet/tools:/snap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/.ghcup/bin"
+          cabal v2-exec archieve
       - name: Commit files
         run: |
           sudo apt install git
