@@ -7,7 +7,6 @@ import qualified Data.Time.LocalTime as Time
 import Debug.Trace
 import Model
 import Parser
-import Parser
 import Test.Hspec
 import qualified Text.Parsec as P
 import qualified Text.Parsec.Char as P
@@ -40,13 +39,13 @@ main = hspec $ do
     sampleArticle <- runIO $ readFile "./test/sampleArticle.md"
     it "can parse whole post" do
       case parseContents $ T.pack sampleArticle of
-        Right x  -> do
+        Right x -> do
           title x `shouldBe` "honi"
           uid x `shouldBe` 1
           tags x `shouldBe` ["test"]
           updatedTime x `shouldBe` 1587615600000
+          isDraft x `shouldBe` True
           articleText x `shouldBe` "ほにほに！ふわっ！ふわっ！ ٩(*╹ω╹*)و！！\n\n"
-        Left err -> do 
+        Left err -> do
           print err
           1 `shouldBe` 0
-              

@@ -19,4 +19,5 @@ type alias Article =
     , articleText : String
     , updatedTime : Time.Posix
     , uid : Int
+    , isDraft : Bool
     }

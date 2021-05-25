@@ -8,6 +8,7 @@ import qualified Data.Time.Clock.POSIX as PT
 import qualified Data.Time.LocalTime as Time
 import qualified Foreign.C.Types as C
 import Model
+import Text.Parsec ((<|>))
 import qualified Text.Parsec as P
 import qualified Text.Parsec.Char as P
 import qualified Text.Parsec.Text as P
@@ -35,7 +36,7 @@ updatedAtParser = sectionParser "updatedAt" do
   _ <- P.char ':'
   min <- read <$> P.many1 P.digit
   let localtime = Time.LocalTime (Day.fromGregorian y m d) (Time.TimeOfDay h min 0)
-  pure $ (\(MkFixed x) -> x `div` (1000*1000*1000)) $ Clock.nominalDiffTimeToSeconds $ PT.utcTimeToPOSIXSeconds $ Time.localTimeToUTC jst localtime
+  pure $ (\(MkFixed x) -> x `div` (1000 * 1000 * 1000)) $ Clock.nominalDiffTimeToSeconds $ PT.utcTimeToPOSIXSeconds $ Time.localTimeToUTC jst localtime
   where
     jst = Time.TimeZone (9 * 60) False "jst"
 
@@ -46,7 +47,10 @@ bodyParser :: P.Parser T.Text
 bodyParser = sectionParser "body" $ T.pack <$> P.many1 P.anyChar
 
 uidParser :: P.Parser Int
-uidParser = sectionParser "uid" $ read <$> P.many1 P.digit 
+uidParser = sectionParser "uid" $ read <$> P.many1 P.digit
+
+isDraftParser :: P.Parser Bool
+isDraftParser = sectionParser "isDraft" $ read <$> (P.string "True" <|> P.string "False")
 
 parseContents :: T.Text -> Either P.ParseError Article
 parseContents = P.parse parser ""
@@ -61,5 +65,9 @@ parseContents = P.parse parser ""
       P.spaces
       updatedTime <- updatedAtParser
       P.spaces
+      isDraft <- isDraftParser
+
+      P.spaces
       articleText <- bodyParser
+
       pure $ Article {..}

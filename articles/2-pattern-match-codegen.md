@@ -14,6 +14,9 @@ ocaml compiler
 
 2020-08-05 21:40
 
+# isDraft 
+False
+
 # body
 
 ## 何の話？

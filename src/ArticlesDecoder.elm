@@ -17,9 +17,10 @@ articlesDecoder =
 
 articleDecoder : Decoder Article
 articleDecoder =
-    map5 Article
+    map6 Article
         (field "title" string)
         (field "tags" (list tagDecoder))
         (field "articleText" string)
         (field "updatedTime" (map Time.millisToPosix int))
         (field "uid" int)
+        (field "isDraft" bool)

@@ -13,9 +13,9 @@ data Article = Article
     updatedTime ::
       Integer,
     tags :: [Tag],
-    articleText :: T.Text
+    articleText :: T.Text,
+    isDraft :: Bool
   }
   deriving (Show, Generic)
 
 instance J.ToJSON Article
-
