@@ -1,11 +1,18 @@
 # title
 Unionfindを使ってHM型推論を書いた
+
 # uid
 3
+
 # tags
 compiler
+
 # updatedAt
 2020-09-28 19:27
+
+# isDraft 
+False 
+
 # body
 
 HM型推論を書くとき教科書通りにASTをトラバースして型変数を振って型変数間の同値関係を集めてその同値類を作るような実装をしていた(伝われ)が、

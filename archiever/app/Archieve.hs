@@ -19,9 +19,9 @@ archieveArticles :: [String] -> Either [P.ParseError] J.Value
 archieveArticles contents = do
   let parseResults :: ([Either P.ParseError Article]) = map (parseContents . T.pack) contents
   let errs = lefts parseResults
-  if not $ null errs 
+  if not $ null errs
     then Left errs
-    else do 
+    else do
       let articles = rights parseResults
       Right $ J.toJSON articles
 
@@ -34,11 +34,10 @@ main = do
   let mds = map ("../articles/" ++) $ filter (endsWith ".md") files
   contents :: [String] <- mapM IO.readFile mds
   let articles = archieveArticles contents
-  case articles of 
-    Right res -> do 
+  case articles of
+    Right res -> do
       let xs = JT.encodeToLazyText res
       let distPath = "../articles.json"
       IO.writeFile distPath $ LT.unpack xs
       putStrLn "DONE!"
-
     Left err -> print err -- TODO どのarticleでエラー出たか表示
